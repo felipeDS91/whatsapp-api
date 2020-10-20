@@ -1,0 +1,15 @@
+node_modules/
+dist/
+build/
+
+coverage
+
+src/whatsapp/sessions/*
+
+tmp/*
+tmp/uploads/*
+!tmp/uploads
+!tmp/uploads/.gitkeep
+.DS_Store
+
+.env
