@@ -17,6 +17,9 @@ class User {
   @Column()
   key: string;
 
+  @Column('boolean')
+  admin: boolean;
+
   @CreateDateColumn()
   created_at: Date;
 

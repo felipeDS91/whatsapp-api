@@ -5,10 +5,11 @@ import User from '../models/User';
 interface Request {
   name: string;
   key: string;
+  admin: boolean;
 }
 
 class CreateUserService {
-  public async execute({ name, key }: Request): Promise<User> {
+  public async execute({ name, key, admin }: Request): Promise<User> {
     const usersRepository = getRepository(User);
 
     const checkUserExists = await usersRepository.findOne({
@@ -23,6 +24,7 @@ class CreateUserService {
 
     const newUser = usersRepository.create({
       name,
+      admin,
       key: hashdKey,
     });
 

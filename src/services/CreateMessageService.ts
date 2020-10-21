@@ -1,5 +1,5 @@
 import { getCustomRepository } from 'typeorm';
-import { isAfter } from 'date-fns';
+import { isBefore } from 'date-fns';
 
 import Message from '../models/Message';
 import MessagesRepository from '../repositories/MessageRepository';
@@ -30,7 +30,7 @@ class CreateMessageService {
       throw Error('Invalid message');
     }
 
-    if (schedule_date && isAfter(schedule_date, new Date())) {
+    if (schedule_date && isBefore(schedule_date, new Date())) {
       throw Error('Invalid schedule date');
     }
 

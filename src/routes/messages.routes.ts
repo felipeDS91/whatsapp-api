@@ -5,11 +5,11 @@ import { getCustomRepository } from 'typeorm';
 import MessagesRepository from '../repositories/MessageRepository';
 import CreateMessageService from '../services/CreateMessageService';
 
-import ensureAuthenticated from '../middlewares/ensureAuthenticated';
+// import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
 const messagesRouter = Router();
 
-messagesRouter.use(ensureAuthenticated);
+// messagesRouter.use(ensureAuthenticated);
 
 messagesRouter.get('/', async (request, response) => {
   const messagesRepository = getCustomRepository(MessagesRepository);
