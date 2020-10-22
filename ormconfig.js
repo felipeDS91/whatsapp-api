@@ -32,10 +32,10 @@ const prodConfig = [
     database: process.env.DB_NAME,
 
     entities: [
-      "./dist/models/*.ts"
+      "./dist/models/*.js"
     ],
     migrations: [
-      "./dist/database/migrations/*.ts"
+      "./dist/database/migrations/*.js"
     ],
     cli: {
       "migrationsDir": "./dist/database/migrations"

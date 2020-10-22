@@ -41,9 +41,4 @@ const checkMessages = async () => {
   checking = false;
 };
 
-// whatsapp.client.initialize();
-
-// if (process.env.NODE_ENV !== 'production') checkMessages();
-// else setInterval(checkMessages, process.env.CHECK_INTERVAL);
-
 setInterval(checkMessages, process.env.CHECK_INTERVAL);
