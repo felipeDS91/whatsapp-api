@@ -4,6 +4,7 @@ import { sign, verify } from 'jsonwebtoken';
 import authConfig from '../config/auth';
 
 import User from '../models/User';
+import AppError from '../errors/AppError';
 
 interface ITokenPayload {
   iat: string;
@@ -29,13 +30,13 @@ class AuthenticateUserService {
     const user = await usersRepository.findOne({ where: { name } });
 
     if (!user) {
-      throw new Error('Email ou Senha inválidos');
+      throw new AppError('Invalid e-mail or password');
     }
 
     const passwordMatched = await compare(key, user.key);
 
     if (!passwordMatched) {
-      throw new Error('Email ou Senha inválidos');
+      throw new AppError('Invalid e-mail or password');
     }
 
     const { secret, expiresIn } = authConfig.jwt;

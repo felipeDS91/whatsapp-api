@@ -3,6 +3,7 @@ import { isBefore } from 'date-fns';
 
 import Message from '../models/Message';
 import MessagesRepository from '../repositories/MessageRepository';
+import AppError from '../errors/AppError';
 
 interface Request {
   from: string;
@@ -23,15 +24,15 @@ class CreateMessageService {
     const numberSize = to.length;
 
     if (numberSize > 11 || numberSize < 10) {
-      throw Error('Invalid number to');
+      throw new AppError('Invalid number to');
     }
 
     if (!message) {
-      throw Error('Invalid message');
+      throw new AppError('Invalid message');
     }
 
     if (schedule_date && isBefore(schedule_date, new Date())) {
-      throw Error('Invalid schedule date');
+      throw new AppError('Invalid schedule date');
     }
 
     const newMessage = messagesRepository.create({

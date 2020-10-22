@@ -2,9 +2,9 @@ import { Client } from 'whatsapp-web.js';
 import fs from 'fs';
 import path from 'path';
 import qrcode from 'qrcode-terminal';
-import Message from '../models/Message';
+import Message from '../../models/Message';
 
-const SESSION_PATH = path.resolve(__dirname, 'sessions');
+const SESSION_PATH = path.resolve(__dirname, '..', 'sessions');
 const TEMP_SESSION_FILE_PATH = `${path.resolve(SESSION_PATH)}session.json`;
 
 interface IReturn {
@@ -12,7 +12,7 @@ interface IReturn {
 }
 
 class Whatsapp {
-  public client: Client;
+  private client: Client;
 
   constructor() {
     this.client = new Client({});
@@ -88,6 +88,10 @@ class Whatsapp {
     await this.getConnectionBack();
 
     return true;
+  }
+
+  public async registerNewToken(): Promise<void> {
+    this.client.initialize();
   }
 
   public async sendMessage(message: Message): Promise<IReturn> {

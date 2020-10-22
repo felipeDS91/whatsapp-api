@@ -5,14 +5,10 @@ import Whatsapp from '../whatsapp/client';
 const tokenRouter = Router();
 
 tokenRouter.post('/', async (request, response) => {
-  try {
-    const whatsapp = new Whatsapp();
-    await whatsapp.client.initialize();
+  const whatsapp = new Whatsapp();
+  await whatsapp.registerNewToken();
 
-    return response.status(200).send();
-  } catch ({ message }) {
-    return response.status(400).json({ message });
-  }
+  return response.status(200).send();
 });
 
 export default tokenRouter;

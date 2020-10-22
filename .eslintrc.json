@@ -26,6 +26,9 @@
       "no-console": "off",
       "camelcase": "off",
       "class-methods-use-this": "off",
+      "@typescript-eslint/no-unused-vars": ["error", {
+        "argsIgnorePattern": "_"
+      }],
       "import/extensions": [
         "error",
         "ignorePackages",

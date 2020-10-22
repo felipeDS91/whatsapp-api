@@ -5,25 +5,21 @@ import AuthenticationUserService from '../services/AuthenticateUserService';
 const sessionsRouter = Router();
 
 sessionsRouter.post('/', async (request, response) => {
-  try {
-    const { name, key } = request.body;
+  const { name, key } = request.body;
 
-    const authenticateUser = new AuthenticationUserService();
+  const authenticateUser = new AuthenticationUserService();
 
-    const { user, token, expires } = await authenticateUser.execute({
-      name,
-      key,
-    });
+  const { user, token, expires } = await authenticateUser.execute({
+    name,
+    key,
+  });
 
-    const userWithoutKey = {
-      id: user.id,
-      name: user.name,
-    };
+  const userWithoutKey = {
+    id: user.id,
+    name: user.name,
+  };
 
-    return response.json({ user: userWithoutKey, token, expires });
-  } catch ({ message }) {
-    return response.status(400).json({ message });
-  }
+  return response.json({ user: userWithoutKey, token, expires });
 });
 
 export default sessionsRouter;

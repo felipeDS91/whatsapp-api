@@ -16,7 +16,7 @@ class MessagesRepository extends Repository<Message> {
     const findMessage = await this.find({
       where: [
         { schedule_date: LessThanOrEqual(new Date()), status: 'WAITING' },
-        { schedule_date: IsNull(), status: 0 },
+        { schedule_date: IsNull(), status: 'WAITING' },
       ],
       take: 10,
       order: { id: 'DESC' },
