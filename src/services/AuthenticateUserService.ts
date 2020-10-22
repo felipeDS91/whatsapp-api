@@ -13,8 +13,8 @@ interface ITokenPayload {
 }
 
 interface IRequest {
-  name: string;
-  key: string;
+  username: string;
+  password: string;
 }
 
 interface IResponse {
@@ -24,19 +24,19 @@ interface IResponse {
 }
 
 class AuthenticateUserService {
-  public async execute({ name, key }: IRequest): Promise<IResponse> {
+  public async execute({ username, password }: IRequest): Promise<IResponse> {
     const usersRepository = getRepository(User);
 
-    const user = await usersRepository.findOne({ where: { name } });
+    const user = await usersRepository.findOne({ where: { username } });
 
     if (!user) {
-      throw new AppError('Invalid e-mail or password');
+      throw new AppError('Invalid username or password');
     }
 
-    const passwordMatched = await compare(key, user.key);
+    const passwordMatched = await compare(password, user.password);
 
     if (!passwordMatched) {
-      throw new AppError('Invalid e-mail or password');
+      throw new AppError('Invalid username or password');
     }
 
     const { secret, expiresIn } = authConfig.jwt;

@@ -12,10 +12,10 @@ class User {
   id: string;
 
   @Column()
-  name: string;
+  username: string;
 
   @Column()
-  key: string;
+  password: string;
 
   @Column('boolean')
   admin: boolean;

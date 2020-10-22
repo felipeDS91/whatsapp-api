@@ -1,14 +1,9 @@
 import { Router } from 'express';
-
-import Whatsapp from '../whatsapp/client';
+import TokensController from '../controllers/TokensController';
 
 const tokenRouter = Router();
+const tokenController = new TokensController();
 
-tokenRouter.post('/', async (request, response) => {
-  const whatsapp = new Whatsapp();
-  await whatsapp.registerNewToken();
-
-  return response.status(200).send();
-});
+tokenRouter.post('/', tokenController.create);
 
 export default tokenRouter;
