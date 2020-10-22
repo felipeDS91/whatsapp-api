@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
+    "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files",
     "dev:api": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules src/server.ts",
     "dev:whatsapp": "ts-node-dev --transpile-only --ignore-watch node_modules src/whatsapp/index.ts",
     "dev:server": "concurrently \"yarn dev:api\" \"yarn dev:whatsapp\"",
@@ -12,6 +12,14 @@
     "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js"
   },
   "dependencies": {
+    "@babel/cli": "^7.12.1",
+    "@babel/core": "^7.12.3",
+    "@babel/node": "^7.12.1",
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
+    "@babel/plugin-proposal-decorators": "^7.12.1",
+    "@babel/preset-env": "^7.12.1",
+    "@babel/preset-typescript": "^7.12.1",
+    "babel-plugin-transform-typescript-metadata": "^0.3.1",
     "bcryptjs": "^2.4.3",
     "concurrently": "^5.3.0",
     "date-fns": "^2.16.1",
