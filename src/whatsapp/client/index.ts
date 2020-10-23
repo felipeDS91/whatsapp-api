@@ -77,7 +77,11 @@ class Whatsapp {
       if (fs.existsSync(sessionPath)) {
         const session = await import(sessionPath);
 
-        this.client = new Client({ session, takeoverOnConflict: false });
+        this.client = new Client({
+          session,
+          takeoverOnConflict: false,
+          puppeteer: { args: ['--no-sandbox', '--disable-setuid-sandbox'] },
+        });
 
         await this.client.initialize();
 
