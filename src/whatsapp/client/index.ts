@@ -15,7 +15,9 @@ class Whatsapp {
   private client: Client;
 
   constructor() {
-    this.client = new Client({});
+    this.client = new Client({
+      puppeteer: { args: ['--no-sandbox', '--disable-setuid-sandbox'] },
+    });
 
     this.client.on('qr', async qr => {
       qrcode.generate(qr, { small: true });
