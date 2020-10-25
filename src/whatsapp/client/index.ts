@@ -1,11 +1,9 @@
 import { Client } from 'whatsapp-web.js';
-import fs from 'fs';
-import path from 'path';
 import qrcode from 'qrcode-terminal';
+import { getCustomRepository } from 'typeorm';
 import Message from '../../models/Message';
-
-const SESSION_PATH = path.resolve(__dirname, '..', 'sessions');
-const TEMP_SESSION_FILE_PATH = `${path.resolve(SESSION_PATH)}session.json`;
+import CreateTokenService from '../../services/CreateTokenService';
+import TokensRepository from '../../repositories/TokensRepository';
 
 interface IReturn {
   status: 'SUCCESS' | 'ERROR' | 'FROM_NOT_FOUND';
@@ -13,6 +11,8 @@ interface IReturn {
 
 class Whatsapp {
   private client: Client;
+
+  private sessionToSave: string | undefined;
 
   constructor() {
     this.client = new Client({
@@ -23,20 +23,18 @@ class Whatsapp {
       qrcode.generate(qr, { small: true });
     });
 
-    this.client.on('ready', () => {
+    this.client.on('ready', async () => {
       console.log('Client is ready!');
 
-      if (fs.existsSync(SESSION_PATH)) {
-        fs.rename(
-          TEMP_SESSION_FILE_PATH,
-          `${SESSION_PATH}/${this.client.info.me.user}.json`,
-          error => {
-            if (error) {
-              console.log('Error on change actual file session name');
-              console.log(error);
-            }
-          },
-        );
+      if (this.sessionToSave) {
+        const createToken = new CreateTokenService();
+
+        await createToken.execute({
+          phone: this.client.info.me.user,
+          token: this.sessionToSave,
+        });
+
+        this.sessionToSave = undefined;
       }
     });
 
@@ -49,13 +47,7 @@ class Whatsapp {
     // Save session values to the file upon successful auth
     this.client.on('authenticated', newSession => {
       console.log('Authenticated');
-
-      fs.writeFile(TEMP_SESSION_FILE_PATH, JSON.stringify(newSession), err => {
-        if (err) {
-          console.log('Error on saving auth');
-          console.error(err);
-        }
-      });
+      this.sessionToSave = JSON.stringify(newSession);
     });
   }
 
@@ -72,13 +64,13 @@ class Whatsapp {
       !this.client ||
       (this.client && this.client?.info?.me?.user !== `55${number}`)
     ) {
-      const sessionPath = path.resolve(SESSION_PATH, `55${number}.json`);
+      const tokenRepository = getCustomRepository(TokensRepository);
 
-      if (fs.existsSync(sessionPath)) {
-        const session = await import(sessionPath);
+      const token = await tokenRepository.findByPhone(`55${number}`);
 
+      if (token) {
         this.client = new Client({
-          session,
+          session: JSON.parse(token.token),
           takeoverOnConflict: false,
           puppeteer: { args: ['--no-sandbox', '--disable-setuid-sandbox'] },
         });
@@ -89,6 +81,7 @@ class Whatsapp {
 
         return true;
       }
+
       return false;
     }
     await this.getConnectionBack();

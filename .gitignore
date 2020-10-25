@@ -4,8 +4,6 @@ build/
 
 coverage
 
-src/whatsapp/sessions/*
-
 tmp/*
 tmp/uploads/*
 !tmp/uploads

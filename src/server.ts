@@ -28,6 +28,8 @@ app.use((err: Error, req: Request, res: Response, _: NextFunction) => {
   });
 });
 
-app.listen(process.env.PORT, () => {
-  console.log(`⚡️ Server started on port ${process.env.PORT}!`);
+app.listen(process.env.PORT || process.env.APP_PORT, () => {
+  console.log(
+    `⚡️ Server started on port ${process.env.PORT || process.env.APP_PORT}!`,
+  );
 });

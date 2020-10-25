@@ -2,7 +2,7 @@ import { getCustomRepository } from 'typeorm';
 import { isBefore } from 'date-fns';
 
 import Message from '../models/Message';
-import MessagesRepository from '../repositories/MessageRepository';
+import MessagesRepository from '../repositories/MessagesRepository';
 import AppError from '../errors/AppError';
 
 interface Request {

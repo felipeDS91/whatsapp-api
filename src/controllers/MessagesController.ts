@@ -2,7 +2,7 @@ import { parseISO } from 'date-fns';
 import { Request, Response } from 'express';
 import { getCustomRepository } from 'typeorm';
 import AppError from '../errors/AppError';
-import MessagesRepository from '../repositories/MessageRepository';
+import MessagesRepository from '../repositories/MessagesRepository';
 import CreateMessageService from '../services/CreateMessageService';
 
 export default class MessagesController {

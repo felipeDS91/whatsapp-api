@@ -4,14 +4,6 @@ import Message from '../models/Message';
 
 @EntityRepository(Message)
 class MessagesRepository extends Repository<Message> {
-  // public async findByDate(date: Date): Promise<Message | null> {
-  //   const findMessage = await this.findOne({
-  //     where: { date },
-  //   });
-
-  //   return findMessage || null;
-  // }
-
   public async findMessagesToSend(): Promise<Message[]> {
     const findMessage = await this.find({
       where: [

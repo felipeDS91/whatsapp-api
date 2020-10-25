@@ -6,7 +6,7 @@ import '../database';
 import { getCustomRepository } from 'typeorm';
 import { sleepRandomTime } from '../utils/functions';
 
-import MessagesRepository from '../repositories/MessageRepository';
+import MessagesRepository from '../repositories/MessagesRepository';
 
 import Whatsapp from './client';
 
