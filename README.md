@@ -10,23 +10,23 @@
 </h3>
 
 <p align="center">
-  <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/felipeDS91/whatsapp-api?color=%23fbc131">
+  <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/felipeDS91/whatsapp-api">
 
   <a href="https://www.linkedin.com/in/felipe-douglas-dev/" target="_blank" rel="noopener noreferrer">
-    <img alt="Made by" src="https://img.shields.io/badge/made%20by-felipe%20douglas-%23fbc131">
+    <img alt="Made by" src="https://img.shields.io/badge/made%20by-felipe%20douglas-%">
   </a>
 
-  <img alt="Repository size" src="https://img.shields.io/github/repo-size/felipeDS91/whatsapp-api?color=%23fbc131">
+  <img alt="Repository size" src="https://img.shields.io/github/repo-size/felipeDS91/whatsapp-api">
 
   <a href="https://github.com/felipeDS91/whatsapp-api/commits/main">
-    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/felipeDS91/whatsapp-api?color=%23fbc131">
+    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/felipeDS91/whatsapp-api">
   </a>
 
   <a href="https://github.com/felipeDS91/whatsapp-api/issues">
-    <img alt="Repository issues" src="https://img.shields.io/github/issues/felipeDS91/whatsapp-api?color=%23fbc131">
+    <img alt="Repository issues" src="https://img.shields.io/github/issues/felipeDS91/whatsapp-api">
   </a>
 
-  <img alt="GitHub" src="https://img.shields.io/github/license/felipeDS91/whatsapp-api?color=%23fbc131">
+  <img alt="GitHub" src="https://img.shields.io/github/license/felipeDS91/whatsapp-api">
 </p>
 
 <p align="center">
@@ -38,7 +38,7 @@
 </p>
 
 <p id="insomniaButton" align="center">
-  <a href="https://insomnia.rest/run/?label=Goldman&uri=https%3A%2F%2Fgithub.com%2FfelipeDS91%2Fwhatsapp-api%2Fblob%2Fmain%2FInsomnia.json" target="_blank">
+  <a href="https://insomnia.rest/run/?label=Whatsapp-API&uri=https%3A%2F%2Fgithub.com%2FfelipeDS91%2Fwhatsapp-api%2Fblob%2Fmain%2FInsomnia.json" target="_blank">
     <img src="https://insomnia.rest/images/run.svg" alt="Run in Insomnia">
   </a>
 </p>
