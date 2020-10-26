@@ -10,4 +10,6 @@ tmp/uploads/*
 !tmp/uploads/.gitkeep
 .DS_Store
 
+.vscode/
+
 .env
