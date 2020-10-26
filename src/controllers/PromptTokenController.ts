@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import Whatsapp from '../whatsapp/client';
 
-export default class NewTokenController {
+export default class PromptTokenController {
   public async create(request: Request, response: Response): Promise<Response> {
     const whatsapp = new Whatsapp();
     await whatsapp.registerNewToken();
