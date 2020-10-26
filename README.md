@@ -13,9 +13,9 @@
   <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/felipeDS91/whatsapp-api">
 
   <a href="https://www.linkedin.com/in/felipe-douglas-dev/" target="_blank" rel="noopener noreferrer">
-    <img alt="Made by" src="https://img.shields.io/badge/made%20by-felipe%20douglas-%">
+    <img alt="Made by" src="https://img.shields.io/badge/made%20by-felipe%20douglas-%20">
   </a>
-
+  
   <img alt="Repository size" src="https://img.shields.io/github/repo-size/felipeDS91/whatsapp-api">
 
   <a href="https://github.com/felipeDS91/whatsapp-api/commits/main">
