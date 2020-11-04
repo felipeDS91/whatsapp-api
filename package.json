@@ -9,8 +9,7 @@
     "dev:whatsapp": "ts-node-dev --inspect=9230 --transpile-only --ignore-watch node_modules src/whatsapp/index.ts",
     "dev:server": "concurrently \"yarn dev:api\" \"yarn dev:whatsapp\"",
     "start": "concurrently \"node dist/server.js\" \"node dist/whatsapp/index.js\"",
-    "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js",
-    "heroku-postbuild": "yarn install"
+    "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js"
   },
   "dependencies": {
     "@babel/cli": "^7.12.1",
