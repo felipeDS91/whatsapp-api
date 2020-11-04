@@ -1,1 +1,1 @@
-worker: node dist/server.js & node dist/whatsapp/index.js & wait -n
+web: node dist/server.js & node dist/whatsapp/index.js & wait -n
