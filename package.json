@@ -8,7 +8,7 @@
     "dev:api": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules src/server.ts",
     "dev:whatsapp": "ts-node-dev --inspect=9230 --transpile-only --ignore-watch node_modules src/whatsapp/index.ts",
     "dev:server": "concurrently \"yarn dev:api\" \"yarn dev:whatsapp\"",
-    "start": "concurrently \"node dist/server.js\" \"node dist/whatsapp/index.js\"",
+    "start": "concurrently \"yarn install && yarn build && yarn typeorm migration:run && node dist/server.js\" \"node dist/whatsapp/index.js\"",
     "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js"
   },
   "dependencies": {

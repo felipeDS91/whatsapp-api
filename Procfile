@@ -1,1 +1,1 @@
-worker: node dist/server.js
+worker: yarn start
