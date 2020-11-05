@@ -4969,10 +4969,10 @@ vary@~1.1.2:
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
   integrity sha1-IpnwLG3tMNSllhsLn3RSShj2NPw=
 
-whatsapp-web.js@^1.9.0:
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/whatsapp-web.js/-/whatsapp-web.js-1.9.0.tgz#28de7ce99dfc8b62f0878be024e073e55d85f218"
-  integrity sha512-TQXSYA7Za9RQQH0Hh/NdMCxIMiZtuquBJ6Qmc44wQ+ihev7xpUFTDUvp6DGQOFjxLY+Nr68G3t9LQQK4jVJyIQ==
+whatsapp-web.js@1.11.0:
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/whatsapp-web.js/-/whatsapp-web.js-1.11.0.tgz#a43e7e0e471f0b4a01c091aa007d7495ee27a0b5"
+  integrity sha512-gI9Lm1KmmBimNVL8yviJkfkI5qHaKBM47PYtTY2M97RityARmncLwXwss35aKLirQynOjpFxsFEVo4FhMB+3CQ==
   dependencies:
     "@pedroslopez/moduleraid" "^4.1.0"
     jsqr "^1.3.1"
