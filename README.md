@@ -1,7 +1,7 @@
 <h1 align="center">
   <img
     alt="Logo"
-    src="https://res.cloudinary.com/dixtjpk8s/image/upload/v1603667524/API%20WhatsApp/whatsapp-2842640_1280_rfptim.png" width="300px"
+    src="https://res.cloudinary.com/dixtjpk8s/image/upload/v1603667524/API%20WhatsApp/whatsapp-2842640_1280_rfptim.png" width="800px"
   />
 </h1>
 
@@ -121,7 +121,7 @@ $ yarn dev:whatsapp
 
 ##### Admin routes
 - /users: Manage the access to the API.
-- /tokens: Manage the tokens if you want to register tokens wihtout rendering it on command line prompt. Example: In some hosting the render on command line prompt doesn't work properly, so you can use it to insert new numbers (tokens).
+- /tokens: Manage the tokens if you want to register tokens without rendering it on command line prompt. Example: In some hosting the render on command line prompt doesn't work properly, so you can use it to insert new numbers (tokens).
 - /prompt-token: Render a QrCode on command line prompt to be read using an whatsapp and record that number to send new messages.
 
 ## 😖 Troubleshooting
