@@ -21,7 +21,7 @@ class CreateMessageService {
   }: Request): Promise<Message> {
     const messagesRepository = getCustomRepository(MessagesRepository);
 
-    const fromSize = to.length;
+    const fromSize = from.length;
     if (fromSize > 11 || fromSize < 10) {
       throw new AppError('Invalid number from');
     }
