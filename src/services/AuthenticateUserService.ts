@@ -30,13 +30,13 @@ class AuthenticateUserService {
     const user = await usersRepository.findOne({ where: { username } });
 
     if (!user) {
-      throw new AppError('Invalid username or password');
+      throw new AppError('Invalid username or password', 401);
     }
 
     const passwordMatched = await compare(password, user.password);
 
     if (!passwordMatched) {
-      throw new AppError('Invalid username or password');
+      throw new AppError('Invalid username or password', 401);
     }
 
     const { secret, expiresIn } = authConfig.jwt;
