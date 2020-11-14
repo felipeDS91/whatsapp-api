@@ -9,6 +9,8 @@ interface IReturn {
   status: 'SUCCESS' | 'ERROR' | 'FROM_NOT_FOUND';
 }
 
+const DEFAULT_PHONE_LENGTH = 11;
+
 class Whatsapp {
   private client: Client;
 
@@ -97,8 +99,14 @@ class Whatsapp {
     try {
       const changedNumber = await this.setClientNumber(message.from);
 
+      const numberType =
+        message.to.length > DEFAULT_PHONE_LENGTH ? '@g.us' : '@c.us';
+
       if (changedNumber) {
-        await this.client.sendMessage(`55${message.to}@c.us`, message.message);
+        await this.client.sendMessage(
+          `55${message.to}${numberType}`,
+          message.message,
+        );
         return { status: 'SUCCESS' };
       }
       return { status: 'FROM_NOT_FOUND' };
