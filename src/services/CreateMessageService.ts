@@ -27,7 +27,8 @@ class CreateMessageService {
     }
 
     const toSize = to.length;
-    if (toSize > 11 || toSize < 10) {
+
+    if (toSize < 10 || toSize > 22) {
       throw new AppError('Invalid number to');
     }
 
