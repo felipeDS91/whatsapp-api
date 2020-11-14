@@ -64,11 +64,14 @@ class Whatsapp {
   private async setClientNumber(number: string): Promise<boolean> {
     if (
       !this.client ||
-      (this.client && this.client?.info?.me?.user !== `55${number}`)
+      (this.client &&
+        this.client?.info?.me?.user !== `${process.env.DEFAULT_DDI}${number}`)
     ) {
       const tokenRepository = getCustomRepository(TokensRepository);
 
-      const token = await tokenRepository.findByPhone(`55${number}`);
+      const token = await tokenRepository.findByPhone(
+        `${process.env.DEFAULT_DDI}${number}`,
+      );
 
       if (token) {
         this.client = new Client({
@@ -104,7 +107,7 @@ class Whatsapp {
 
       if (changedNumber) {
         await this.client.sendMessage(
-          `55${message.to}${numberType}`,
+          `${process.env.DEFAULT_DDI}${message.to}${numberType}`,
           message.message,
         );
         return { status: 'SUCCESS' };

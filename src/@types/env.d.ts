@@ -4,6 +4,7 @@ declare namespace NodeJS {
     CHECK_INTERVAL: number;
     MIN_SLEEP_INTERVAL: number;
     MAX_SLEEP_INTERVAL: number;
+    DEFAULT_DDI: number;
     APP_WEB_URL?: string;
     APP_SECRET?: string;
     DB_HOST?: string;
