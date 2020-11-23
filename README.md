@@ -15,7 +15,7 @@
   <a href="https://www.linkedin.com/in/felipe-douglas-dev/" target="_blank" rel="noopener noreferrer">
     <img alt="Made by" src="https://img.shields.io/badge/made%20by-felipe%20douglas-%20">
   </a>
-  
+
   <img alt="Repository size" src="https://img.shields.io/github/repo-size/felipeDS91/whatsapp-api">
 
   <a href="https://github.com/felipeDS91/whatsapp-api/commits/main">
@@ -122,7 +122,7 @@ $ yarn dev:whatsapp
 ##### Admin routes
 - /users: Manage the access to the API.
 - /tokens: Manage the tokens if you want to register tokens without rendering it on command line prompt. Example: In some hosting the render on command line prompt doesn't work properly, so you can use it to insert new numbers (tokens).
-- /prompt-token: Render a QrCode on command line prompt to be read using an whatsapp and record that number to send new messages.
+- /prompt-token: Return a qrCode image and also render this QrCode on command line prompt to be read using an whatsapp and record that number to send new messages.
 
 ## 😖 Troubleshooting
 - Paas hosting (Heroku): This project uses whatsapp-web.js package that uses Puppeter and it is based on chrome. So if you are getting some log like this "...loading shared libraries: libnss3.so: cannot open shared object file..." you will have to install a "Buildpack" in your app. To do it, you have to access the app on Heroku and go to the menu "Settings" --> "Buildpacks" --> "Add buildpack", fill out the Buildpack URL with "jontewks/puppeteer" and click in "Save changes" button. And after your next deploy, this buildpack to use puppeter will be installed with your app.

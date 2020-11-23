@@ -1,5 +1,7 @@
+/* eslint-disable no-await-in-loop */
 import { Client } from 'whatsapp-web.js';
-import qrcode from 'qrcode-terminal';
+import qrcodeTerminal from 'qrcode-terminal';
+import qrcode from 'qrcode';
 import { getCustomRepository } from 'typeorm';
 import Message from '../../models/Message';
 import CreateTokenService from '../../services/CreateTokenService';
@@ -16,6 +18,8 @@ class Whatsapp {
 
   private sessionToSave: string | undefined;
 
+  private qrCodeImage: string | undefined;
+
   constructor() {
     this.client = new Client({
       puppeteer: { args: ['--no-sandbox', '--disable-setuid-sandbox'] },
@@ -23,7 +27,8 @@ class Whatsapp {
     });
 
     this.client.on('qr', async qr => {
-      qrcode.generate(qr, { small: true });
+      this.qrCodeImage = await qrcode.toDataURL(qr);
+      qrcodeTerminal.generate(qr, { small: true });
     });
 
     this.client.on('ready', async () => {
@@ -51,6 +56,12 @@ class Whatsapp {
     this.client.on('authenticated', newSession => {
       console.log('Authenticated');
       this.sessionToSave = JSON.stringify(newSession);
+    });
+  }
+
+  private async sleep(ms: number) {
+    return new Promise(resolve => {
+      setTimeout(resolve, ms);
     });
   }
 
@@ -95,8 +106,15 @@ class Whatsapp {
     return true;
   }
 
-  public async registerNewToken(): Promise<void> {
+  public async registerNewToken(): Promise<string> {
+    this.qrCodeImage = undefined;
     this.client.initialize();
+
+    while (!this.qrCodeImage) {
+      await this.sleep(100);
+    }
+
+    return this.qrCodeImage;
   }
 
   public async sendMessage(message: Message): Promise<IReturn> {
