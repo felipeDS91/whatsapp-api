@@ -16,7 +16,6 @@ routes.use(ensureAuthenticated);
 
 routes.use('/messages', messagesRouter);
 routes.use('/users', ensureAdminOnly, usersRouter);
-routes.use('/prompt-token', ensureAdminOnly, promptTokenRouter);
 routes.use('/tokens', ensureAdminOnly, tokensRouter);
 
 export default routes;
