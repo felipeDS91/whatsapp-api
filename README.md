@@ -126,6 +126,12 @@ $ yarn dev:whatsapp
 ## 😖 Troubleshooting
 - Paas hosting (Heroku): This project uses whatsapp-web.js package that uses Puppeter and it is based on chrome. So if you are getting some log like this "...loading shared libraries: libnss3.so: cannot open shared object file..." you will have to install a "Buildpack" in your app. To do it, you have to access the app on Heroku and go to the menu "Settings" --> "Buildpacks" --> "Add buildpack", fill out the Buildpack URL with "jontewks/puppeteer" and click in "Save changes" button. And after your next deploy, this buildpack to use puppeter will be installed with your app.
 
+- Installation of linux dependencies:
+`sudo apt install -y gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget build-essential apt-transport-https libgbm-dev`<br/>
+`curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -`<br/>
+`sudo apt install git nodejs yarn`
+
+
 ## 🤔 How to contribute
 
 - **Make a fork of this repository**
