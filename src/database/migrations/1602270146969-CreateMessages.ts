@@ -28,7 +28,7 @@ export default class CreateMessages1602270146969 implements MigrationInterface {
           },
           {
             name: 'message',
-            type: 'varchar',
+            type: 'text',
           },
           {
             name: 'schedule_date',
