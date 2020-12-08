@@ -8,7 +8,7 @@ import CreateTokenService from '../../services/CreateTokenService';
 import TokensRepository from '../../repositories/TokensRepository';
 
 interface IReturn {
-  status: 'SUCCESS' | 'ERROR' | 'FROM_NOT_FOUND';
+  status: 'SUCCESS' | 'ERROR' | 'FROM_NOT_FOUND' | 'TO_NOT_FOUND';
 }
 
 const DEFAULT_PHONE_LENGTH = 11;
@@ -52,7 +52,7 @@ class Whatsapp {
       }
     });
 
-    // Save session values to the file upon successful auth
+    // Save session values to temporary prop
     this.client.on('authenticated', newSession => {
       console.log('Authenticated');
       this.sessionToSave = JSON.stringify(newSession);
@@ -117,20 +117,46 @@ class Whatsapp {
     return this.qrCodeImage;
   }
 
+  private async getIdByNumber(id: string) {
+    try {
+      const number = await this.client.pupPage.evaluate(id => {
+        return window.WWebJS.getNumberId(id);
+      }, id);
+
+      return number._serialized;
+    } catch {
+      return null;
+    }
+  }
+
+  private async getFormattedId(id: string): Promise<string | undefined> {
+    const numberType = id.length > DEFAULT_PHONE_LENGTH ? '@g.us' : '@c.us';
+
+    if (numberType === '@c.us') {
+      const verifiedNumber = await this.getIdByNumber(
+        `${process.env.DEFAULT_DDI}${id}${numberType}`,
+      );
+
+      return verifiedNumber;
+    }
+    return `${process.env.DEFAULT_DDI}${id}${numberType}`;
+  }
+
   public async sendMessage(message: Message): Promise<IReturn> {
     try {
       const changedNumber = await this.setClientNumber(message.from);
 
-      const numberType =
-        message.to.length > DEFAULT_PHONE_LENGTH ? '@g.us' : '@c.us';
+      const to = await this.getFormattedId(message.to);
+
+      if (!to) {
+        return { status: 'TO_NOT_FOUND' };
+      }
 
       if (changedNumber) {
-        await this.client.sendMessage(
-          `${process.env.DEFAULT_DDI}${message.to}${numberType}`,
-          message.message,
-        );
+        await this.client.sendMessage(to, message.message);
         return { status: 'SUCCESS' };
       }
+
       return { status: 'FROM_NOT_FOUND' };
     } catch (error) {
       console.log(error);
