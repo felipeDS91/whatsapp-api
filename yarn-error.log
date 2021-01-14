@@ -1,5 +1,5 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add babel--plugin-transform-typescript-metadata
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js upgrade web-whatsapp.js@1.11.2
 
 PATH: 
   C:\Python27\Scripts\;C:\Python27\;C:\ProgramData\Oracle\Java\javapath;C:\Program Files (x86)\Embarcadero\Studio\19.0\bin;C:\Users\Public\Documents\Embarcadero\Studio\19.0\Bpl;C:\Program Files (x86)\Embarcadero\Studio\19.0\bin64;C:\Users\Public\Documents\Embarcadero\Studio\19.0\Bpl\Win64;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\TortoiseSVN\bin;D:\MySQL\bin;C:\Program Files\Git\cmd;C:\Program Files (x86)\Python37-32;C:\Users\Felip\AppData\Roaming\Python\Python37\Scripts;C:\ProgramData\chocolatey\bin;C:\Program Files\nodejs\;C:\Program Files\Java\jdk1.8.0_211\bin;C:\Program Files (x86)\Tesseract-OCR\;;C:\Program Files (x86)\Yarn\bin\;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\Users\Felip\AppData\Local\Microsoft\WindowsApps;C:\Users\Felip\AppData\Local\Programs\Microsoft VS Code\bin;C:\Program Files\JetBrains\PyCharm 2018.3.5\bin;C:\Program Files\heroku\bin;C:\Users\Felip\AppData\Roaming\npm;C:\Users\Felip\AppData\Local\Android\Sdk\platforms;C:\Users\Felip\AppData\Local\Android\Sdk\platform-tools;C:\Users\Felip\AppData\Local\Yarn\bin
@@ -14,7 +14,7 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/babel--plugin-transform-typescript-metadata: Not found
+  Error: https://registry.yarnpkg.com/web-whatsapp.js: Not found
       at Request.params.callback [as _callback] (C:\Program Files (x86)\Yarn\lib\cli.js:66096:18)
       at Request.self.callback (C:\Program Files (x86)\Yarn\lib\cli.js:140748:22)
       at Request.emit (events.js:200:13)
@@ -34,18 +34,21 @@ npm manifest:
     "license": "MIT",
     "scripts": {
       "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files",
-      "dev:api": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules src/server.ts",
-      "dev:whatsapp": "ts-node-dev --transpile-only --ignore-watch node_modules src/whatsapp/index.ts",
+      "dev:api": "ts-node-dev --transpile-only --ignore-watch node_modules src/server.ts",
+      "dev:whatsapp": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules src/whatsapp/index.ts",
       "dev:server": "concurrently \"yarn dev:api\" \"yarn dev:whatsapp\"",
-      "start": "ts-node src/index.ts",
+      "start": "concurrently \"node dist/server.js\" \"node dist/whatsapp/index.js\"",
       "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js"
     },
     "dependencies": {
       "@babel/cli": "^7.12.1",
       "@babel/core": "^7.12.3",
       "@babel/node": "^7.12.1",
+      "@babel/plugin-proposal-class-properties": "^7.12.1",
+      "@babel/plugin-proposal-decorators": "^7.12.1",
       "@babel/preset-env": "^7.12.1",
       "@babel/preset-typescript": "^7.12.1",
+      "babel-plugin-transform-typescript-metadata": "^0.3.1",
       "bcryptjs": "^2.4.3",
       "concurrently": "^5.3.0",
       "date-fns": "^2.16.1",
@@ -54,17 +57,20 @@ npm manifest:
       "express-async-errors": "^3.1.1",
       "jsonwebtoken": "^8.5.1",
       "mysql": "^2.18.1",
+      "qrcode": "^1.4.4",
       "qrcode-terminal": "^0.12.0",
       "reflect-metadata": "^0.1.13",
+      "ts-node-dev": "^1.0.0-pre.63",
       "typeorm": "^0.2.28",
       "uuidv4": "^6.2.4",
-      "whatsapp-web.js": "^1.9.0"
+      "whatsapp-web.js": "1.11.1"
     },
     "devDependencies": {
       "@types/bcryptjs": "^2.4.2",
       "@types/dotenv": "^8.2.0",
       "@types/express": "^4.17.8",
       "@types/jsonwebtoken": "^8.5.0",
+      "@types/qrcode": "^1.3.5",
       "@typescript-eslint/eslint-plugin": "^4.4.0",
       "@typescript-eslint/parser": "^4.4.0",
       "eslint": "6.8.0",
@@ -74,7 +80,6 @@ npm manifest:
       "eslint-plugin-import": "2.21.2",
       "eslint-plugin-prettier": "^3.1.4",
       "prettier": "^2.1.2",
-      "ts-node-dev": "^1.0.0-pre.63",
       "typescript": "^4.0.3"
     }
   }
@@ -393,6 +398,15 @@ Lockfile:
       "@babel/helper-create-class-features-plugin" "^7.12.1"
       "@babel/helper-plugin-utils" "^7.10.4"
   
+  "@babel/plugin-proposal-decorators@^7.12.1":
+    version "7.12.1"
+    resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-decorators/-/plugin-proposal-decorators-7.12.1.tgz#59271439fed4145456c41067450543aee332d15f"
+    integrity sha512-knNIuusychgYN8fGJHONL0RbFxLGawhXOJNLBk75TniTsZZeA+wdkDuv6wp4lGwzQEKjZi6/WYtnb3udNPmQmQ==
+    dependencies:
+      "@babel/helper-create-class-features-plugin" "^7.12.1"
+      "@babel/helper-plugin-utils" "^7.10.4"
+      "@babel/plugin-syntax-decorators" "^7.12.1"
+  
   "@babel/plugin-proposal-dynamic-import@^7.12.1":
     version "7.12.1"
     resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-dynamic-import/-/plugin-proposal-dynamic-import-7.12.1.tgz#43eb5c2a3487ecd98c5c8ea8b5fdb69a2749b2dc"
@@ -494,6 +508,13 @@ Lockfile:
     version "7.12.1"
     resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-class-properties/-/plugin-syntax-class-properties-7.12.1.tgz#bcb297c5366e79bebadef509549cd93b04f19978"
     integrity sha512-U40A76x5gTwmESz+qiqssqmeEsKvcSyvtgktrm0uzcARAmM9I1jR221f6Oq+GmHrcD+LvZDag1UTOTe2fL3TeA==
+    dependencies:
+      "@babel/helper-plugin-utils" "^7.10.4"
+  
+  "@babel/plugin-syntax-decorators@^7.12.1":
+    version "7.12.1"
+    resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-decorators/-/plugin-syntax-decorators-7.12.1.tgz#81a8b535b284476c41be6de06853a8802b98c5dd"
+    integrity sha512-ir9YW5daRrTYiy9UJ2TzdNIJEZu8KclVzDcfSt4iEmOtwQ4llPtWInNKJyKnVXp1vE4bbVd5S31M/im3mYMO1w==
     dependencies:
       "@babel/helper-plugin-utils" "^7.10.4"
   
@@ -1086,6 +1107,13 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/@types/node/-/node-14.11.5.tgz#fecad41c041cae7f2404ad4b2d0742fdb628b305"
     integrity sha512-jVFzDV6NTbrLMxm4xDSIW/gKnk8rQLF9wAzLWIOg+5nU6ACrIMndeBdXci0FGtqJbP9tQvm6V39eshc96TO2wQ==
   
+  "@types/qrcode@^1.3.5":
+    version "1.3.5"
+    resolved "https://registry.yarnpkg.com/@types/qrcode/-/qrcode-1.3.5.tgz#9c97cc2875f03e2b16a0d89856fc48414e380c38"
+    integrity sha512-92QMnMb9m0ErBU20za5Eqtf4lzUcSkk5w/Cz30q5qod0lWHm2loztmFs2EnCY06yT51GY1+m/oFq2D8qVK2Bjg==
+    dependencies:
+      "@types/node" "*"
+  
   "@types/qs@*":
     version "6.9.5"
     resolved "https://registry.yarnpkg.com/@types/qs/-/qs-6.9.5.tgz#434711bdd49eb5ee69d90c1d67c354a9a8ecb18b"
@@ -1387,6 +1415,13 @@ Lockfile:
     dependencies:
       object.assign "^4.1.0"
   
+  babel-plugin-transform-typescript-metadata@^0.3.1:
+    version "0.3.1"
+    resolved "https://registry.yarnpkg.com/babel-plugin-transform-typescript-metadata/-/babel-plugin-transform-typescript-metadata-0.3.1.tgz#d86599b7139131ba5e917f5f568d0c824a5cdfc3"
+    integrity sha512-thOuACZReULfLy7vh2o3/joYkkRerMKLBDmXy3ImCnkNUnxBmNw0uVa05JhhX0slluaEkio6OIFa7zPgaJdk6g==
+    dependencies:
+      "@babel/helper-plugin-utils" "^7.0.0"
+  
   balanced-match@^1.0.0:
     version "1.0.0"
     resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
@@ -1396,6 +1431,11 @@ Lockfile:
     version "1.3.1"
     resolved "https://registry.yarnpkg.com/base64-js/-/base64-js-1.3.1.tgz#58ece8cb75dd07e71ed08c736abc5fac4dbf8df1"
     integrity sha512-mLQ4i2QO1ytvGWFWmcngKO//JXAQueZvwEKtjgQFM4jIK0kU+ytMfplL8j+n5mspOfjHwoAg+9yhb7BwAHm36g==
+  
+  base64-js@^1.3.1:
+    version "1.5.1"
+    resolved "https://registry.yarnpkg.com/base64-js/-/base64-js-1.5.1.tgz#1b1b440160a5bf7ad40b650f095963481903930a"
+    integrity sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==
   
   base@^0.11.1:
     version "0.11.2"
@@ -1503,6 +1543,19 @@ Lockfile:
       escalade "^3.1.0"
       node-releases "^1.1.61"
   
+  buffer-alloc-unsafe@^1.1.0:
+    version "1.1.0"
+    resolved "https://registry.yarnpkg.com/buffer-alloc-unsafe/-/buffer-alloc-unsafe-1.1.0.tgz#bd7dc26ae2972d0eda253be061dba992349c19f0"
+    integrity sha512-TEM2iMIEQdJ2yjPJoSIsldnleVaAk1oW3DBVUykyOLsEsFmEc9kn+SFFPz+gl54KQNxlDnAwCXosOS9Okx2xAg==
+  
+  buffer-alloc@^1.2.0:
+    version "1.2.0"
+    resolved "https://registry.yarnpkg.com/buffer-alloc/-/buffer-alloc-1.2.0.tgz#890dd90d923a873e08e10e5fd51a57e5b7cce0ec"
+    integrity sha512-CFsHQgjtW1UChdXgbyJGtnm+O/uLQeZdtbDo8mfUgYXCHSM1wgrVxXm6bSyrUuErEb+4sYVGCzASBRot7zyrow==
+    dependencies:
+      buffer-alloc-unsafe "^1.1.0"
+      buffer-fill "^1.0.0"
+  
   buffer-crc32@~0.2.3:
     version "0.2.13"
     resolved "https://registry.yarnpkg.com/buffer-crc32/-/buffer-crc32-0.2.13.tgz#0d333e3f00eac50aa1454abd30ef8c2a5d9a7242"
@@ -1513,7 +1566,12 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/buffer-equal-constant-time/-/buffer-equal-constant-time-1.0.1.tgz#f8e71132f7ffe6e01a5c9697a4c6f3e48d5cc819"
     integrity sha1-+OcRMvf/5uAaXJaXpMbz5I1cyBk=
   
-  buffer-from@^1.0.0:
+  buffer-fill@^1.0.0:
+    version "1.0.0"
+    resolved "https://registry.yarnpkg.com/buffer-fill/-/buffer-fill-1.0.0.tgz#f8f78b76789888ef39f205cd637f68e702122b2c"
+    integrity sha1-+PeLdniYiO858gXNY39o5wISKyw=
+  
+  buffer-from@^1.0.0, buffer-from@^1.1.1:
     version "1.1.1"
     resolved "https://registry.yarnpkg.com/buffer-from/-/buffer-from-1.1.1.tgz#32713bc028f75c02fdb710d7c7bcec1f2c6070ef"
     integrity sha512-MQcXEUbCKtEo7bhqEs6560Hyd4XaovZlO/k9V3hjVUF/zwW7KBVdSK4gIt/bzwS9MbR5qob+F5jusZsb0YQK2A==
@@ -1525,6 +1583,14 @@ Lockfile:
     dependencies:
       base64-js "^1.0.2"
       ieee754 "^1.1.4"
+  
+  buffer@^5.4.3:
+    version "5.7.1"
+    resolved "https://registry.yarnpkg.com/buffer/-/buffer-5.7.1.tgz#ba62e7c13133053582197160851a8f648e99eed0"
+    integrity sha512-EHcyIPBQ4BSGlvjB16k5KgAJ27CIsHY/2JBmCRReo48y9rQ3MaUzWX3KVlBa4U7MyX02HdVj0K7C3WaB3ju7FQ==
+    dependencies:
+      base64-js "^1.3.1"
+      ieee754 "^1.1.13"
   
   bytes@3.1.0:
     version "3.1.0"
@@ -1952,6 +2018,11 @@ Lockfile:
     version "4.0.2"
     resolved "https://registry.yarnpkg.com/diff/-/diff-4.0.2.tgz#60f3aecb89d5fae520c11aa19efc2bb982aade7d"
     integrity sha512-58lmxKSA4BNyLz+HHMUzlOEpg09FV+ev6ZMe3vJihgdxzgcwZ8VoEEPmALCZG9LmqfVoNMMKpttIYTVG6uDY7A==
+  
+  dijkstrajs@^1.0.1:
+    version "1.0.1"
+    resolved "https://registry.yarnpkg.com/dijkstrajs/-/dijkstrajs-1.0.1.tgz#d3cd81221e3ea40742cfcde556d4e99e98ddc71b"
+    integrity sha1-082BIh4+pAdCz83lVtTpnpjdxxs=
   
   dir-glob@^3.0.1:
     version "3.0.1"
@@ -2807,6 +2878,11 @@ Lockfile:
     dependencies:
       safer-buffer ">= 2.1.2 < 3"
   
+  ieee754@^1.1.13:
+    version "1.2.1"
+    resolved "https://registry.yarnpkg.com/ieee754/-/ieee754-1.2.1.tgz#8eb7a10a63fff25d15a57b001586d177d1b0d352"
+    integrity sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==
+  
   ieee754@^1.1.4:
     version "1.1.13"
     resolved "https://registry.yarnpkg.com/ieee754/-/ieee754-1.1.13.tgz#ec168558e95aa181fd87d37f55c32bbcb6708b84"
@@ -3074,6 +3150,11 @@ Lockfile:
     version "1.0.0"
     resolved "https://registry.yarnpkg.com/isarray/-/isarray-1.0.0.tgz#bb935d48582cba168c06834957a54a3e07124f11"
     integrity sha1-u5NdSFgsuhaMBoNJV6VKPgcSTxE=
+  
+  isarray@^2.0.1:
+    version "2.0.5"
+    resolved "https://registry.yarnpkg.com/isarray/-/isarray-2.0.5.tgz#8af1e4c1221244cc62459faf38940d4e644a5723"
+    integrity sha512-xHjhDr3cNBK0BzdUJSPXZntQUx/mwMS5Rw4A7lPJ90XGAO6ISP/ePDNuo0vhqOZU+UD5JoodwCAAoZQd3FeAKw==
   
   isexe@^2.0.0:
     version "2.0.0"
@@ -3919,6 +4000,11 @@ Lockfile:
     dependencies:
       find-up "^4.0.0"
   
+  pngjs@^3.3.0:
+    version "3.4.0"
+    resolved "https://registry.yarnpkg.com/pngjs/-/pngjs-3.4.0.tgz#99ca7d725965fb655814eaf65f38f12bbdbf555f"
+    integrity sha512-NCrCHhWmnQklfH4MtJMRjZ2a8c80qXeMlQMv2uVp9ISJMTt562SbGd6n2oq0PaPgKm7Z6pL9E2UlLIhC+SHL3w==
+  
   posix-character-classes@^0.1.0:
     version "0.1.1"
     resolved "https://registry.yarnpkg.com/posix-character-classes/-/posix-character-classes-0.1.1.tgz#01eac0fe3b5af71a2a6c02feabb8c1fef7e00eab"
@@ -3998,6 +4084,19 @@ Lockfile:
     version "0.12.0"
     resolved "https://registry.yarnpkg.com/qrcode-terminal/-/qrcode-terminal-0.12.0.tgz#bb5b699ef7f9f0505092a3748be4464fe71b5819"
     integrity sha512-EXtzRZmC+YGmGlDFbXKxQiMZNwCLEO6BANKXG4iCtSIM0yqc/pappSx3RIKr4r0uh5JsBckOXeKrB3Iz7mdQpQ==
+  
+  qrcode@^1.4.4:
+    version "1.4.4"
+    resolved "https://registry.yarnpkg.com/qrcode/-/qrcode-1.4.4.tgz#f0c43568a7e7510a55efc3b88d9602f71963ea83"
+    integrity sha512-oLzEC5+NKFou9P0bMj5+v6Z40evexeE29Z9cummZXZ9QXyMr3lphkURzxjXgPJC5azpxcshoDWV1xE46z+/c3Q==
+    dependencies:
+      buffer "^5.4.3"
+      buffer-alloc "^1.2.0"
+      buffer-from "^1.1.1"
+      dijkstrajs "^1.0.1"
+      isarray "^2.0.1"
+      pngjs "^3.3.0"
+      yargs "^13.2.4"
   
   qs@6.7.0:
     version "6.7.0"
@@ -5031,10 +5130,10 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
     integrity sha1-IpnwLG3tMNSllhsLn3RSShj2NPw=
   
-  whatsapp-web.js@^1.9.0:
-    version "1.9.0"
-    resolved "https://registry.yarnpkg.com/whatsapp-web.js/-/whatsapp-web.js-1.9.0.tgz#28de7ce99dfc8b62f0878be024e073e55d85f218"
-    integrity sha512-TQXSYA7Za9RQQH0Hh/NdMCxIMiZtuquBJ6Qmc44wQ+ihev7xpUFTDUvp6DGQOFjxLY+Nr68G3t9LQQK4jVJyIQ==
+  whatsapp-web.js@1.11.1:
+    version "1.11.1"
+    resolved "https://registry.yarnpkg.com/whatsapp-web.js/-/whatsapp-web.js-1.11.1.tgz#43a70e3d0a340cfc879d7cb79bfa0b37f2099a27"
+    integrity sha512-tlRpZBLtBIqVvf9y6dCq3A7rbLu2ttc+D55JwCoNvPniiiZyFLVV4LUAA40g0hEpapkwFbiYdHv5eAV2Gubw3g==
     dependencies:
       "@pedroslopez/moduleraid" "^4.1.0"
       jsqr "^1.3.1"
@@ -5160,7 +5259,7 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/yargs-parser/-/yargs-parser-20.2.1.tgz#28f3773c546cdd8a69ddae68116b48a5da328e77"
     integrity sha512-yYsjuSkjbLMBp16eaOt7/siKTjNVjMm3SoJnIg3sEh/JsvqVVDyjRKmaJV4cl+lNIgq6QEco2i3gDebJl7/vLA==
   
-  yargs@^13.3.0:
+  yargs@^13.2.4, yargs@^13.3.0:
     version "13.3.2"
     resolved "https://registry.yarnpkg.com/yargs/-/yargs-13.3.2.tgz#ad7ffefec1aa59565ac915f82dccb38a9c31a2dd"
     integrity sha512-AX3Zw5iPruN5ie6xGRIDgqkT+ZhnRlZMLMHAs8tg7nRruy2Nb+i5o9bwghAogtM08q1dpr2LVoS8KSTMYpWXUw==
