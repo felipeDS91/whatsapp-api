@@ -28,7 +28,7 @@ class Whatsapp {
   constructor() {
     this.client = new Client({
       puppeteer: { args: ['--no-sandbox', '--disable-setuid-sandbox'] },
-      qrRefreshIntervalMs: 15000,
+      qrRefreshIntervalMs: 150000,
     });
 
     this.client.on('qr', async qr => {

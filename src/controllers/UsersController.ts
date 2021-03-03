@@ -16,13 +16,13 @@ export default class UsersController {
       admin,
     });
 
-    const userWithoutKey = {
+    const userWithoutPassword = {
       id: user.id,
       name: user.username,
       admin: user.admin,
     };
 
-    return response.json({ user: userWithoutKey });
+    return response.json(userWithoutPassword);
   }
 
   public async delete(request: Request, response: Response): Promise<Response> {
