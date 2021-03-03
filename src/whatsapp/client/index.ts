@@ -8,7 +8,12 @@ import CreateTokenService from '../../services/CreateTokenService';
 import TokensRepository from '../../repositories/TokensRepository';
 
 interface IReturn {
-  status: 'SUCCESS' | 'ERROR' | 'FROM_NOT_FOUND' | 'TO_NOT_FOUND';
+  status:
+    | 'SUCCESS'
+    | 'ERROR'
+    | 'FROM_NOT_FOUND'
+    | 'FROM_DISCONNECTED'
+    | 'TO_NOT_FOUND';
 }
 
 const DEFAULT_PHONE_LENGTH = 11;
@@ -73,12 +78,11 @@ class Whatsapp {
     }
   }
 
-  private async setClientNumber(number: string): Promise<boolean> {
-    if (
-      !this.client ||
-      (this.client &&
-        this.client?.info?.me?.user !== `${process.env.DEFAULT_DDI}${number}`)
-    ) {
+  private async setFromClient(number: string): Promise<boolean> {
+    const connectedWithWrongFromNumber =
+      this.client?.info?.me?.user !== `${process.env.DEFAULT_DDI}${number}`;
+
+    if (!this.client || connectedWithWrongFromNumber) {
       const tokenRepository = getCustomRepository(TokensRepository);
 
       const token = await tokenRepository.findByPhone(
@@ -94,7 +98,7 @@ class Whatsapp {
 
         await this.client.initialize();
 
-        console.log('client number changed');
+        console.log('Client number changed');
 
         return true;
       }
@@ -142,24 +146,29 @@ class Whatsapp {
     return `${process.env.DEFAULT_DDI}${id}${numberType}`;
   }
 
+  private async isDisconnected(): Promise<boolean> {
+    try {
+      const status = await this.client.getState();
+      return status !== 'CONNECTED';
+    } catch {
+      return true;
+    }
+  }
+
   public async sendMessage(message: Message): Promise<IReturn> {
     try {
-      const changedNumber = await this.setClientNumber(message.from);
+      const definedFrom = await this.setFromClient(message.from);
+      if (!definedFrom) return { status: 'FROM_NOT_FOUND' };
+
+      if (await this.isDisconnected()) return { status: 'FROM_DISCONNECTED' };
 
       const to = await this.getFormattedId(message.to);
+      if (!to) return { status: 'TO_NOT_FOUND' };
 
-      if (!to) {
-        return { status: 'TO_NOT_FOUND' };
-      }
-
-      if (changedNumber) {
-        await this.client.sendMessage(to, message.message);
-        return { status: 'SUCCESS' };
-      }
-
-      return { status: 'FROM_NOT_FOUND' };
+      await this.client.sendMessage(to, message.message);
+      return { status: 'SUCCESS' };
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return { status: 'ERROR' };
     }
   }
