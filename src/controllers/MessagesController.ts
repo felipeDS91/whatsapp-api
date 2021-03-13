@@ -1,9 +1,16 @@
 import { parseISO } from 'date-fns';
 import { Request, Response } from 'express';
-import { getCustomRepository } from 'typeorm';
+import { getCustomRepository, ILike } from 'typeorm';
 import AppError from '../errors/AppError';
 import MessagesRepository from '../repositories/MessagesRepository';
 import CreateMessageService from '../services/CreateMessageService';
+
+const RES_PER_PAGE = 10;
+
+interface IQueryParams {
+  page: number;
+  q: string;
+}
 
 export default class MessagesController {
   public async create(request: Request, response: Response): Promise<Response> {
@@ -25,14 +32,30 @@ export default class MessagesController {
     return response.json(newMessage);
   }
 
-  public async show(request: Request, response: Response): Promise<Response> {
-    const messagesRepository = getCustomRepository(MessagesRepository);
-    const messages = await messagesRepository.find();
+  public async index(request: Request, response: Response): Promise<Response> {
+    const { page = 1, q } = (request.query as unknown) as IQueryParams;
 
-    return response.json(messages);
+    const messagesRepository = getCustomRepository(MessagesRepository);
+
+    const [messages, total] = await messagesRepository.findAndCount({
+      take: RES_PER_PAGE,
+      skip: (page - 1) * RES_PER_PAGE,
+      where: q && { status: q },
+      order: { created_at: 'DESC' },
+    });
+
+    const pages = Math.ceil(total / RES_PER_PAGE);
+
+    return response.json({
+      total,
+      pages,
+      limit: RES_PER_PAGE,
+      page: Number(page),
+      docs: messages,
+    });
   }
 
-  public async index(request: Request, response: Response): Promise<Response> {
+  public async show(request: Request, response: Response): Promise<Response> {
     const messagesRepository = getCustomRepository(MessagesRepository);
     const messages = await messagesRepository.findOne(request.params.id);
 

@@ -6,7 +6,7 @@ const tokenController = new TokensController();
 
 tokensRouter.post('/', tokenController.create);
 
-tokensRouter.get('/', tokenController.show);
+tokensRouter.get('/', tokenController.index);
 
 tokensRouter.delete('/:phone', tokenController.delete);
 

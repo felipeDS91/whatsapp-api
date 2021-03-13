@@ -2,7 +2,6 @@ import { Router } from 'express';
 import messagesRouter from './messages.routes';
 import usersRouter from './users.routes';
 import sessionsRouter from './sessions.routes';
-import promptTokenRouter from './promptToken.routes';
 import tokensRouter from './tokens.routes';
 
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';

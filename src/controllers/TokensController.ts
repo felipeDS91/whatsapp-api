@@ -27,7 +27,7 @@ export default class TokensController {
     return response.status(200).send();
   }
 
-  public async show(_: Request, response: Response): Promise<Response> {
+  public async index(_: Request, response: Response): Promise<Response> {
     const tokenRepository = getRepository(Token);
     const tokens = await tokenRepository.find();
 
