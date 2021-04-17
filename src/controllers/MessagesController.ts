@@ -1,6 +1,6 @@
 import { parseISO } from 'date-fns';
 import { Request, Response } from 'express';
-import { getCustomRepository, ILike } from 'typeorm';
+import { getCustomRepository } from 'typeorm';
 import AppError from '../errors/AppError';
 import MessagesRepository from '../repositories/MessagesRepository';
 import CreateMessageService from '../services/CreateMessageService';

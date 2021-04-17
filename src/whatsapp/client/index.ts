@@ -7,6 +7,12 @@ import Message from '../../models/Message';
 import CreateTokenService from '../../services/CreateTokenService';
 import TokensRepository from '../../repositories/TokensRepository';
 
+declare global {
+  interface Window {
+    WWebJS: any;
+  }
+}
+
 interface IReturn {
   status:
     | 'SUCCESS'
@@ -27,7 +33,9 @@ class Whatsapp {
 
   constructor() {
     this.client = new Client({
-      puppeteer: { args: ['--no-sandbox', '--disable-setuid-sandbox'] },
+      puppeteer: {
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      },
       qrRefreshIntervalMs: 150000,
     });
 
@@ -78,6 +86,15 @@ class Whatsapp {
     }
   }
 
+  private async readTimeout(ms: number): Promise<void> {
+    await this.sleep(ms);
+
+    if (this.client) {
+      console.log('read qrcode timeout reached');
+      await this.client.destroy();
+    }
+  }
+
   private async setFromClient(number: string): Promise<boolean> {
     const connectedWithWrongFromNumber =
       this.client?.info?.me?.user !== `${process.env.DEFAULT_DDI}${number}`;
@@ -98,7 +115,7 @@ class Whatsapp {
 
         await this.client.initialize();
 
-        console.log('Client number changed');
+        console.log('client number changed');
 
         return true;
       }
@@ -112,21 +129,26 @@ class Whatsapp {
 
   public async registerNewToken(): Promise<string> {
     this.qrCodeImage = undefined;
-    this.client.initialize();
+
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    this.client.initialize().catch(() => {});
 
     while (!this.qrCodeImage) {
       await this.sleep(100);
     }
+
+    this.readTimeout(process.env.READ_QRCODE_TIMEOUT);
 
     return this.qrCodeImage;
   }
 
   private async getIdByNumber(id: string) {
     try {
-      const number = await this.client.pupPage.evaluate(id => {
+      const number = await this.client.pupPage.evaluate(() => {
         return window.WWebJS.getNumberId(id);
       }, id);
 
+      // eslint-disable-next-line no-underscore-dangle
       return number._serialized;
     } catch {
       return null;

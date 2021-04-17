@@ -5,11 +5,12 @@
   "license": "MIT",
   "scripts": {
     "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files",
-    "dev:api": "ts-node-dev --transpile-only --ignore-watch node_modules src/server.ts",
-    "dev:whatsapp": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules src/whatsapp/index.ts",
+    "dev:api": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules src/server.ts",
+    "dev:whatsapp": "ts-node-dev --transpile-only --ignore-watch node_modules src/whatsapp/index.ts",
     "dev:server": "concurrently \"yarn dev:api\" \"yarn dev:whatsapp\"",
     "start": "concurrently \"node dist/server.js\" \"node dist/whatsapp/index.js\"",
-    "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js"
+    "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js",
+    "gcp-build": "tsc -p ."
   },
   "dependencies": {
     "@babel/cli": "^7.12.1",
