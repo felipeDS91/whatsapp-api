@@ -144,7 +144,7 @@ class Whatsapp {
 
   private async getIdByNumber(id: string) {
     try {
-      const number = await this.client.pupPage.evaluate(() => {
+      const number = await this.client.pupPage.evaluate(id => {
         return window.WWebJS.getNumberId(id);
       }, id);
 
