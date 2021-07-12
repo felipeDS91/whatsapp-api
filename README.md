@@ -72,7 +72,7 @@ Import the `Insomnia.json` on Insomnia App or click on [Run in Insomnia](#insomn
 ### Requirements
 
 - [Docker](https://www.docker.com/)
-- [Node](https://nodejs.org/en/download/)
+- [Node v14+](https://nodejs.org/en/download/)
 - [Yarn](https://classic.yarnpkg.com/en/docs/install#windows-stable)
 
 **Clone the project and access the folder**

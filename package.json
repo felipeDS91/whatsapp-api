@@ -33,9 +33,9 @@
     "qrcode": "^1.4.4",
     "qrcode-terminal": "^0.12.0",
     "reflect-metadata": "^0.1.13",
-    "ts-node-dev": "^1.0.0-pre.63",
+    "ts-node-dev": "1.1.8",
     "typeorm": "0.2.30",
-    "whatsapp-web.js": "1.12.5"
+    "whatsapp-web.js": "1.13.2"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
