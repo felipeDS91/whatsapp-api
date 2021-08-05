@@ -3,6 +3,7 @@ import messagesRouter from './messages.routes';
 import usersRouter from './users.routes';
 import sessionsRouter from './sessions.routes';
 import tokensRouter from './tokens.routes';
+import contactsRouter from './contacts.routes';
 
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 import ensureAdminOnly from '../middlewares/ensureAdminOnly';
@@ -16,5 +17,6 @@ routes.use(ensureAuthenticated);
 routes.use('/messages', messagesRouter);
 routes.use('/users', ensureAdminOnly, usersRouter);
 routes.use('/tokens', ensureAdminOnly, tokensRouter);
+routes.use('/contacts', ensureAdminOnly, contactsRouter);
 
 export default routes;

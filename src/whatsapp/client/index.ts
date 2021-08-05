@@ -1,11 +1,12 @@
 /* eslint-disable no-await-in-loop */
-import { Client } from 'whatsapp-web.js';
+import WAWebJS, { Client } from 'whatsapp-web.js';
 import qrcodeTerminal from 'qrcode-terminal';
 import qrcode from 'qrcode';
 import { getCustomRepository } from 'typeorm';
 import Message from '../../models/Message';
 import CreateTokenService from '../../services/CreateTokenService';
 import TokensRepository from '../../repositories/TokensRepository';
+import AppError from '../../errors/AppError';
 
 declare global {
   interface Window {
@@ -140,6 +141,19 @@ class Whatsapp {
     this.readTimeout(process.env.READ_QRCODE_TIMEOUT);
 
     return this.qrCodeImage;
+  }
+
+  public async getContacts(from: string): Promise<WAWebJS.Contact[]> {
+    const definedFrom = await this.setFromClient(from);
+    if (!definedFrom)
+      throw new AppError(`error to connect with phone number ${from}`);
+
+    if (await this.isDisconnected())
+      throw new AppError(`phone number ${from} disconnected`);
+
+    const contacts = await this.client.getContacts();
+
+    return contacts;
   }
 
   private async getIdByNumber(id: string) {
