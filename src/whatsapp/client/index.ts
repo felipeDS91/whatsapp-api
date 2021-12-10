@@ -131,7 +131,7 @@ class Whatsapp {
   public async registerNewToken(): Promise<string> {
     this.qrCodeImage = undefined;
 
-    await this.client.initialize().catch(_ => _);
+    this.client.initialize().catch(_ => _);
 
     while (!this.qrCodeImage) {
       await this.sleep(100);
