@@ -114,7 +114,7 @@ class Whatsapp {
           puppeteer: { args: ['--no-sandbox', '--disable-setuid-sandbox'] },
         });
 
-        await this.client.initialize();
+        await this.client.initialize().catch(_ => _);
 
         console.log('client number changed');
 
@@ -131,8 +131,7 @@ class Whatsapp {
   public async registerNewToken(): Promise<string> {
     this.qrCodeImage = undefined;
 
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    this.client.initialize().catch(() => {});
+    await this.client.initialize().catch(_ => _);
 
     while (!this.qrCodeImage) {
       await this.sleep(100);
@@ -158,7 +157,7 @@ class Whatsapp {
 
   private async getIdByNumber(id: string) {
     try {
-      const number = await this.client.pupPage.evaluate(id => {
+      const number = await this.client.pupPage?.evaluate(id => {
         return window.WWebJS.getNumberId(id);
       }, id);
 
