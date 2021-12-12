@@ -1,0 +1,13 @@
+version: '3'
+services:
+  mysql_dev:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_DATABASE=whatsapp
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=1234
+    expose:
+      - '3306'
+    ports:
+      - '3306:3306'
