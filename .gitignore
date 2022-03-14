@@ -13,3 +13,5 @@ tmp/uploads/*
 .vscode/
 
 .env
+
+WWebJS/
