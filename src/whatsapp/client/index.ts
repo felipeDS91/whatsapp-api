@@ -1,5 +1,5 @@
 /* eslint-disable no-await-in-loop */
-import WAWebJS, { Client } from 'whatsapp-web.js';
+import WAWebJS, { Client, LegacySessionAuth } from 'whatsapp-web.js';
 import qrcodeTerminal from 'qrcode-terminal';
 import qrcode from 'qrcode';
 import { getCustomRepository } from 'typeorm';
@@ -16,11 +16,11 @@ declare global {
 
 interface IReturn {
   status:
-    | 'SUCCESS'
-    | 'ERROR'
-    | 'FROM_NOT_FOUND'
-    | 'FROM_DISCONNECTED'
-    | 'TO_NOT_FOUND';
+  | 'SUCCESS'
+  | 'ERROR'
+  | 'FROM_NOT_FOUND'
+  | 'FROM_DISCONNECTED'
+  | 'TO_NOT_FOUND';
 }
 
 const DEFAULT_PHONE_LENGTH = 11;
@@ -37,7 +37,7 @@ class Whatsapp {
       puppeteer: {
         args: ['--no-sandbox', '--disable-setuid-sandbox'],
       },
-      qrRefreshIntervalMs: 150000,
+      authStrategy: new LegacySessionAuth(),
     });
 
     this.client.on('qr', async qr => {
@@ -67,9 +67,9 @@ class Whatsapp {
     });
 
     // Save session values to temporary prop
-    this.client.on('authenticated', newSession => {
+    this.client.on('authenticated', (session) => {
       console.log('Authenticated');
-      this.sessionToSave = JSON.stringify(newSession);
+      this.sessionToSave = JSON.stringify(session);
     });
   }
 
@@ -109,7 +109,9 @@ class Whatsapp {
 
       if (token) {
         this.client = new Client({
-          session: JSON.parse(token.token),
+          authStrategy: new LegacySessionAuth({
+            session: JSON.parse(token.token),
+          }),
           takeoverOnConflict: false,
           puppeteer: { args: ['--no-sandbox', '--disable-setuid-sandbox'] },
         });
@@ -156,14 +158,14 @@ class Whatsapp {
   }
 
   private async getIdByNumber(id: string) {
-    try {
-      const number = await this.client.pupPage?.evaluate(id => {
-        return window.WWebJS.getNumberId(id);
-      }, id);
 
-      // eslint-disable-next-line no-underscore-dangle
-      return number._serialized;
-    } catch {
+    try {
+
+      const { _serialized: numberId } = await this.client.getNumberId(id);
+
+      return numberId;
+    } catch (e) {
+      console.log(e);
       return null;
     }
   }
@@ -172,9 +174,8 @@ class Whatsapp {
     const numberType = id.length > DEFAULT_PHONE_LENGTH ? '@g.us' : '@c.us';
 
     if (numberType === '@c.us') {
-      const verifiedNumber = await this.getIdByNumber(
-        `${process.env.DEFAULT_DDI}${id}${numberType}`,
-      );
+      const formattedNumber = `${process.env.DEFAULT_DDI}${id}${numberType}`;
+      const verifiedNumber = await this.getIdByNumber(formattedNumber);
 
       return verifiedNumber;
     }
