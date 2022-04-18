@@ -1,11 +1,9 @@
 /* eslint-disable no-await-in-loop */
-import WAWebJS, { Client, LegacySessionAuth } from 'whatsapp-web.js';
+import WAWebJS, { Client, LocalAuth } from 'whatsapp-web.js';
 import qrcodeTerminal from 'qrcode-terminal';
 import qrcode from 'qrcode';
-import { getCustomRepository } from 'typeorm';
 import Message from '../../models/Message';
 import CreateTokenService from '../../services/CreateTokenService';
-import TokensRepository from '../../repositories/TokensRepository';
 import AppError from '../../errors/AppError';
 
 declare global {
@@ -33,12 +31,11 @@ class Whatsapp {
   private qrCodeImage: string | undefined;
 
   constructor() {
-    this.client = new Client({
-      puppeteer: {
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
-      },
-      authStrategy: new LegacySessionAuth(),
-    });
+
+  }
+
+  private async initializeClient(clientId: string = "") {
+    this.client = new Client({ authStrategy: new LocalAuth({ dataPath: 'tokens', clientId: clientId }) });
 
     this.client.on('qr', async qr => {
       this.qrCodeImage = await qrcode.toDataURL(qr);
@@ -66,11 +63,7 @@ class Whatsapp {
       }
     });
 
-    // Save session values to temporary prop
-    this.client.on('authenticated', (session) => {
-      console.log('Authenticated');
-      this.sessionToSave = JSON.stringify(session);
-    });
+    this.client.initialize().then();
   }
 
   private async sleep(ms: number) {
@@ -97,43 +90,32 @@ class Whatsapp {
   }
 
   private async setFromClient(number: string): Promise<boolean> {
-    const connectedWithWrongFromNumber =
-      this.client?.info?.me?.user !== `${process.env.DEFAULT_DDI}${number}`;
+    const from = `${process.env.DEFAULT_DDI}${number}`;
+
+    const connectedWithWrongFromNumber = this.client?.info?.me?.user !== from;
 
     if (!this.client || connectedWithWrongFromNumber) {
-      const tokenRepository = getCustomRepository(TokensRepository);
 
-      const token = await tokenRepository.findByPhone(
-        `${process.env.DEFAULT_DDI}${number}`,
-      );
+      this.client = new Client({ authStrategy: new LocalAuth({ dataPath: 'tokens', clientId: from }) });
 
-      if (token) {
-        this.client = new Client({
-          authStrategy: new LegacySessionAuth({
-            session: JSON.parse(token.token),
-          }),
-          takeoverOnConflict: false,
-          puppeteer: { args: ['--no-sandbox', '--disable-setuid-sandbox'] },
-        });
+      await this.client.initialize().catch(_ => _);
 
-        await this.client.initialize().catch(_ => _);
+      console.log('client number changed');
 
-        console.log('client number changed');
+      return true;
 
-        return true;
-      }
-
-      return false;
     }
     await this.getConnectionBack();
 
     return true;
   }
 
-  public async registerNewToken(): Promise<string> {
+  public async registerNewToken(number: string): Promise<string> {
+    const from = `${process.env.DEFAULT_DDI}${number}`;
+
     this.qrCodeImage = undefined;
 
-    this.client.initialize().catch(_ => _);
+    this.initializeClient(from);
 
     while (!this.qrCodeImage) {
       await this.sleep(100);

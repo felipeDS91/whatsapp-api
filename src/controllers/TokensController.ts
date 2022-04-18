@@ -8,12 +8,13 @@ import Whatsapp from '../whatsapp/client';
 export default class TokensController {
   private whatsapp: Whatsapp;
 
-  public async create(_: Request, response: Response): Promise<Response> {
+  public async create(request: Request, response: Response): Promise<Response> {
+    const { from } = request.body;
     if (!this.whatsapp) {
       this.whatsapp = new Whatsapp();
     }
 
-    const qrCode = await this.whatsapp.registerNewToken();
+    const qrCode = await this.whatsapp.registerNewToken(from);
 
     const image = qrCode.replace('data:image/png;base64,', '');
     const imageBuffer = Buffer.from(image, 'base64');
