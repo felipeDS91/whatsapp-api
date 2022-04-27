@@ -35,7 +35,10 @@ class Whatsapp {
   }
 
   private async initializeClient(clientId: string = "") {
-    this.client = new Client({ authStrategy: new LocalAuth({ dataPath: 'tokens', clientId: clientId }) });
+    this.client = new Client({
+      authStrategy: new LocalAuth({ dataPath: 'tokens', clientId: clientId }),
+      puppeteer: { args: ['--no-sandbox', '--disable-setuid-sandbox'] },
+    });
 
     this.client.on('qr', async qr => {
       this.qrCodeImage = await qrcode.toDataURL(qr);
@@ -96,7 +99,10 @@ class Whatsapp {
 
     if (!this.client || connectedWithWrongFromNumber) {
 
-      this.client = new Client({ authStrategy: new LocalAuth({ dataPath: 'tokens', clientId: from }) });
+      this.client = new Client({
+        authStrategy: new LocalAuth({ dataPath: 'tokens', clientId: from }),
+        puppeteer: { args: ['--no-sandbox', '--disable-setuid-sandbox'] },
+      });
 
       await this.client.initialize().catch(_ => _);
 
