@@ -23,10 +23,14 @@ const checkMessages = async () => {
     const messagesRepository = getCustomRepository(MessagesRepository);
     const messages = await messagesRepository.findMessagesToSend();
 
+    console.log(`${messages.length} new message to send`);
+
     for (let index = 0; index < messages.length; index += 1) {
       const message = messages[index];
 
       const { status } = await whatsapp.sendMessage(message);
+
+      console.log(`send message status: ${status}`);
 
       await messagesRepository.save({ ...message, status });
 
@@ -36,7 +40,7 @@ const checkMessages = async () => {
       });
     }
   } catch (error) {
-    console.log(error);
+    console.log(`error to check new messages. description: ${error}`);
   }
   checking = false;
 };

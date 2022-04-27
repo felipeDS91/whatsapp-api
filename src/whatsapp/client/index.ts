@@ -108,7 +108,6 @@ class Whatsapp {
 
       console.log(`client number changed to ${from}`);
 
-
       return true;
 
     }
@@ -191,9 +190,10 @@ class Whatsapp {
       if (!to) return { status: 'TO_NOT_FOUND' };
 
       await this.client.sendMessage(to, message.message);
-      console.log('message sended')
+
       return { status: 'SUCCESS' };
     } catch (error) {
+      console.log(`error to send message. description: ${error}`);
       console.error(error);
       return { status: 'ERROR' };
     }
