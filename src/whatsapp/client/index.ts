@@ -101,7 +101,20 @@ class Whatsapp {
 
       this.client = new Client({
         authStrategy: new LocalAuth({ dataPath: 'tokens', clientId: from }),
-        puppeteer: { args: ['--no-sandbox', '--disable-setuid-sandbox'] },
+        puppeteer: {
+          headless: true,
+          args: [
+            '--no-sandbox',
+            '--unhandled-rejections=strict',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-accelerated-2d-canvas',
+            '--no-first-run',
+            '--no-zygote',
+            '--single-process', // <- this one doesn't works in Windows
+            '--disable-gpu'
+          ],
+        },
       });
 
       await this.client.initialize().catch(_ => _);
