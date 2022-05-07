@@ -47,7 +47,7 @@ class Whatsapp {
           '--disable-accelerated-2d-canvas',
           '--no-first-run',
           '--no-zygote',
-          '--single-process', // <- this one doesn't works in Windows
+          '--single-process',
           '--disable-gpu'
         ],
       },
@@ -65,7 +65,7 @@ class Whatsapp {
         const createToken = new CreateTokenService();
 
         await createToken.execute({
-          phone: this.client.info.me.user,
+          phone: this.client.info.wid.user,
           token: this.sessionToSave,
         });
 
@@ -77,6 +77,11 @@ class Whatsapp {
       if (msg.body === '!ping') {
         msg.reply('pong');
       }
+    });
+
+    this.client.on('authenticated', (session) => {
+      console.log('Authenticated');
+      this.sessionToSave = JSON.stringify(session || 'multidevice');
     });
 
     this.client.initialize().then();
@@ -124,7 +129,7 @@ class Whatsapp {
             '--disable-accelerated-2d-canvas',
             '--no-first-run',
             '--no-zygote',
-            '--single-process', // <- this one doesn't works in Windows
+            '--single-process',
             '--disable-gpu'
           ],
         },
