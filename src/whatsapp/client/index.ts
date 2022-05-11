@@ -34,7 +34,15 @@ class Whatsapp {
 
   }
 
+  private async finalizeClient(): Promise<void> {
+    if (this.client != null) {
+      await this.client.destroy();
+    }
+  }
+
   private async initializeClient(clientId: string = "") {
+    await this.finalizeClient();
+
     this.client = new Client({
       authStrategy: new LocalAuth({ dataPath: 'tokens', clientId: clientId }),
       puppeteer: {
@@ -116,6 +124,8 @@ class Whatsapp {
     const connectedWithWrongFromNumber = this.client?.info?.me?.user !== from;
 
     if (!this.client || connectedWithWrongFromNumber) {
+
+      await this.finalizeClient();
 
       this.client = new Client({
         authStrategy: new LocalAuth({ dataPath: 'tokens', clientId: from }),
