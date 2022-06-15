@@ -42,10 +42,14 @@ class Whatsapp {
     }
   }
 
-  private async initializeClient(clientId: string = "") {
-    const sessionPath = appRoot.path + '/tokens/' + clientId;
+  private deleteSessionPath(clientId: string): void {
+    const sessionPath = appRoot.path + '/tokens/session-' + clientId;
     console.log(`erasing path: ${sessionPath}`);
     fs.rmSync(sessionPath, { recursive: true, force: true });
+  }
+
+  private async initializeClient(clientId: string = "") {
+    this.deleteSessionPath(clientId);
 
     await this.finalizeClient();
 
