@@ -5,6 +5,8 @@ import qrcode from 'qrcode';
 import Message from '../../models/Message';
 import CreateTokenService from '../../services/CreateTokenService';
 import AppError from '../../errors/AppError';
+import fs from 'fs';
+import appRoot from 'app-root-path';
 
 declare global {
   interface Window {
@@ -41,6 +43,10 @@ class Whatsapp {
   }
 
   private async initializeClient(clientId: string = "") {
+    const sessionPath = appRoot.path + '/tokens/' + clientId;
+    console.log(`erasing path: ${sessionPath}`);
+    fs.rmSync(sessionPath, { recursive: true, force: true });
+
     await this.finalizeClient();
 
     this.client = new Client({
