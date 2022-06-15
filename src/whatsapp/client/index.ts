@@ -49,7 +49,6 @@ class Whatsapp {
   }
 
   private async initializeClient(clientId: string = "") {
-    this.deleteSessionPath(clientId);
 
     await this.finalizeClient();
 
@@ -171,6 +170,8 @@ class Whatsapp {
     const from = `${process.env.DEFAULT_DDI}${number}`;
 
     this.qrCodeImage = undefined;
+
+    this.deleteSessionPath(from);
 
     this.initializeClient(from);
 
