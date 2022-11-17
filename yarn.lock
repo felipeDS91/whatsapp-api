@@ -4626,10 +4626,10 @@ webidl-conversions@^3.0.0:
   resolved "https://registry.yarnpkg.com/webidl-conversions/-/webidl-conversions-3.0.1.tgz#24534275e2a7bc6be7bc86611cc16ae0a5654871"
   integrity sha1-JFNCdeKnvGvnvIZhHMFq4KVlSHE=
 
-whatsapp-web.js@1.18.2:
-  version "1.18.2"
-  resolved "https://registry.yarnpkg.com/whatsapp-web.js/-/whatsapp-web.js-1.18.2.tgz#ffd1a7c8dfb4b01ea15ef54afbbad8e29e5339f6"
-  integrity sha512-RMzLgstoS9hLK4ix+RchDxXdpuSXuV8jm7SDb/8xc5Ju09zrkOP11dj/4XYszmuwNR0n1VsxNQGp39pnulmcUA==
+whatsapp-web.js@1.18.3:
+  version "1.18.3"
+  resolved "https://registry.yarnpkg.com/whatsapp-web.js/-/whatsapp-web.js-1.18.3.tgz#b0ac4d207f98f99acbd8d84c49e2f5c0f2f88466"
+  integrity sha512-MOCpk2l876kdraMRy+3gHeQKwIXGv14X/7lzI/dJDt0qppGGfwOPIQImjCgLn5nMPhf0SY4dK3YEo6ABSQ6sYg==
   dependencies:
     "@pedroslopez/moduleraid" "^5.0.2"
     fluent-ffmpeg "^2.1.2"
