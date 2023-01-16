@@ -23,6 +23,9 @@ class Message {
   @Column()
   message: string;
 
+  @Column()
+  media_path: string;
+
   @Column('datetime')
   schedule_date: Date;
 
