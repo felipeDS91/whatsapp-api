@@ -5,8 +5,8 @@
   "license": "MIT",
   "scripts": {
     "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files",
-    "dev:api": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules src/server.ts",
-    "dev:whatsapp": "ts-node-dev --transpile-only --ignore-watch node_modules src/whatsapp/index.ts",
+    "dev:api": "ts-node-dev --transpile-only --ignore-watch node_modules src/server.ts",
+    "dev:whatsapp": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules src/whatsapp/index.ts",
     "dev:server": "concurrently \"yarn dev:api\" \"yarn dev:whatsapp\"",
     "start": "concurrently \"node dist/server.js\" \"node dist/whatsapp/index.js\"",
     "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js",
@@ -36,7 +36,7 @@
     "reflect-metadata": "^0.1.13",
     "ts-node-dev": "1.1.8",
     "typeorm": "0.2.30",
-    "whatsapp-web.js": "1.19.2"
+    "whatsapp-web.js": "1.19.3"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",

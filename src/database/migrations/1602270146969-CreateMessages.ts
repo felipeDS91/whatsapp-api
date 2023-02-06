@@ -31,8 +31,8 @@ export default class CreateMessages1602270146969 implements MigrationInterface {
             type: 'text',
           },
           {
-            name: 'media_path',
-            type: 'varchar',
+            name: 'media',
+            type: 'mediumblob',
             isNullable: true,
           },
           {

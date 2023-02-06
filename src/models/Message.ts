@@ -23,8 +23,13 @@ class Message {
   @Column()
   message: string;
 
-  @Column()
-  media_path: string;
+  @Column({
+    transformer: {
+      to: (value: string) => !!value ? Buffer.from(value) : undefined,
+      from: (value: Buffer) => !!value ? value.toString() : undefined,
+    }
+  })
+  media?: string;
 
   @Column('datetime')
   schedule_date: Date;

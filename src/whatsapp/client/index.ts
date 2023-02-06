@@ -1,5 +1,5 @@
 /* eslint-disable no-await-in-loop */
-import WAWebJS, { Client, LocalAuth } from 'whatsapp-web.js';
+import WAWebJS, { Client, LocalAuth, MessageMedia } from 'whatsapp-web.js';
 import qrcodeTerminal from 'qrcode-terminal';
 import qrcode from 'qrcode';
 import Message from '../../models/Message';
@@ -24,6 +24,7 @@ interface IReturn {
 }
 
 const DEFAULT_PHONE_LENGTH = 11;
+const REGEX_REMOVE_BASE64_HEADER = new RegExp(/data:image\/[bmp,gif,ico,jpg,png,svg,webp,x\-icon,svg+xml]+;base64,/);
 
 class Whatsapp {
   private client: Client;
@@ -231,22 +232,27 @@ class Whatsapp {
     }
   }
 
-  public async sendMessage(message: Message): Promise<IReturn> {
+  public async sendMessage({ from, to, message, media }: Message): Promise<IReturn> {
     try {
-      const definedFrom = await this.setFromClient(message.from);
+      const definedFrom = await this.setFromClient(from);
       if (!definedFrom) return { status: 'FROM_NOT_FOUND' };
 
       if (await this.isDisconnected()) return { status: 'FROM_DISCONNECTED' };
 
-      const to = await this.getFormattedId(message.to);
-      if (!to) return { status: 'TO_NOT_FOUND' };
+      const formattedTo = await this.getFormattedId(to);
+      if (!formattedTo) return { status: 'TO_NOT_FOUND' };
 
-      await this.client.sendMessage(to, message.message);
+      if (!!media) {
+        const base64Media = media.replace(REGEX_REMOVE_BASE64_HEADER, "");
+        const messageMedia = new MessageMedia('image/png', base64Media);
+        await this.client.sendMessage(formattedTo, messageMedia, { caption: message });
+      } else {
+        await this.client.sendMessage(formattedTo, message);
+      }
 
       return { status: 'SUCCESS' };
     } catch (error) {
-      console.log(`error to send message. description: ${error}`);
-      console.error(error);
+      console.error(`fail to send message. description: ${error}`);
       return { status: 'ERROR' };
     }
   }
