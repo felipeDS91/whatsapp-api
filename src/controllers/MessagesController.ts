@@ -39,6 +39,7 @@ export default class MessagesController {
     const messagesRepository = getCustomRepository(MessagesRepository);
 
     const [messages, total] = await messagesRepository.findAndCount({
+      select: ['id', 'status', 'from', 'to', 'message', 'schedule_date', 'created_at', 'updated_at'],
       take: RES_PER_PAGE,
       skip: (page - 1) * RES_PER_PAGE,
       where: q && { status: q },
