@@ -36,7 +36,7 @@
     "reflect-metadata": "^0.1.13",
     "ts-node-dev": "1.1.8",
     "typeorm": "0.2.30",
-    "whatsapp-web.js": "1.19.2"
+    "whatsapp-web.js": "1.19.3"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",

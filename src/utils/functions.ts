@@ -14,3 +14,9 @@ export function sleepRandomTime({
     setTimeout(resolve, ms);
   });
 }
+
+export function validateBase64Image(dataString: string): Boolean {
+  const matches = dataString.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+
+  return matches != undefined && matches.length == 3;
+}

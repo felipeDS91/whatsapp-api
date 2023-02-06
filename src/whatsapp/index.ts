@@ -40,7 +40,7 @@ const checkMessages = async () => {
       });
     }
   } catch (error) {
-    console.log(`error to check new messages. description: ${error}`);
+    console.error(`fail to check new messages. description: ${error}`);
   }
   checking = false;
 };

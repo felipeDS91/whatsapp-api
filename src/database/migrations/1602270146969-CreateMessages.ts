@@ -31,6 +31,11 @@ export default class CreateMessages1602270146969 implements MigrationInterface {
             type: 'text',
           },
           {
+            name: 'media',
+            type: 'mediumblob',
+            isNullable: true,
+          },
+          {
             name: 'schedule_date',
             type: 'datetime',
             isNullable: true,

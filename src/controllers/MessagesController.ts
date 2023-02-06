@@ -14,7 +14,7 @@ interface IQueryParams {
 
 export default class MessagesController {
   public async create(request: Request, response: Response): Promise<Response> {
-    const { from, to, message, schedule_date } = request.body;
+    const { from, to, message, image, schedule_date } = request.body;
 
     const parsedScheduleDate = schedule_date
       ? parseISO(schedule_date)
@@ -26,6 +26,7 @@ export default class MessagesController {
       from,
       to,
       message,
+      image,
       schedule_date: parsedScheduleDate,
     });
 

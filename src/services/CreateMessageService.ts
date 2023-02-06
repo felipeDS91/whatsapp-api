@@ -4,11 +4,13 @@ import { isBefore } from 'date-fns';
 import Message from '../models/Message';
 import MessagesRepository from '../repositories/MessagesRepository';
 import AppError from '../errors/AppError';
+import { validateBase64Image } from '../utils/functions';
 
 interface Request {
   from: string;
   to: string;
   message: string;
+  image?: string;
   schedule_date?: Date;
 }
 
@@ -17,6 +19,7 @@ class CreateMessageService {
     from,
     to,
     message,
+    image,
     schedule_date,
   }: Request): Promise<Message> {
     const messagesRepository = getCustomRepository(MessagesRepository);
@@ -40,10 +43,13 @@ class CreateMessageService {
       throw new AppError('Invalid schedule date');
     }
 
+    const media = !!image && validateBase64Image(image) ? image : undefined;
+
     const newMessage = messagesRepository.create({
       from,
       to,
       message,
+      media,
       schedule_date,
     });
 
@@ -54,3 +60,4 @@ class CreateMessageService {
 }
 
 export default CreateMessageService;
+
