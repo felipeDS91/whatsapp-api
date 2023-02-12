@@ -112,6 +112,8 @@ class Whatsapp {
 
     await this.finalizeClient();
 
+    this.isReady = false;
+
     this.client = new Client({
       authStrategy: new LocalAuth({ dataPath: 'tokens', clientId: clientId }),
       puppeteer: {
@@ -130,11 +132,10 @@ class Whatsapp {
       },
     });
 
-    // this.client.on('ready', async () => {
-    //   console.log('Client is ready!');
-    //   this.isReady = true;
-    //   console.log('Client is ready!');
-    // });
+    this.client.on('ready', async () => {
+      console.log('Client is ready!');
+      this.isReady = true;
+    });
 
     await this.client.initialize().catch(_ => _);
   }
@@ -169,17 +170,16 @@ class Whatsapp {
 
     if (!this.client || connectedWithWrongFromNumber) {
 
-      await this.initializeClient(from);
-
-      // const authTimeout = addMilliseconds(new Date(), process.env.AUTH_TIMEOUT);
-      // while (!this.isReady) {
-      //   if (isAfter(new Date(), authTimeout)) {
-      //     console.warn('auth timeout reached');
-      //     await this.finalizeClient();
-      //     return false;
-      //   }
-      //   await this.sleep(100);
-      // }
+      this.initializeClient(from);
+      const authTimeout = addMilliseconds(new Date(), process.env.AUTH_TIMEOUT);
+      while (!this.isReady) {
+        if (isAfter(new Date(), authTimeout)) {
+          console.warn('auth timeout reached');
+          await this.finalizeClient();
+          return false;
+        }
+        await this.sleep(100);
+      }
 
       console.log(`client number changed to ${from}`);
 
