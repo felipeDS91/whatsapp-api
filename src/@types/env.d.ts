@@ -2,6 +2,7 @@ declare namespace NodeJS {
   export interface ProcessEnv {
     NODE_ENV?: string;
     READ_QRCODE_TIMEOUT: number;
+    AUTH_TIMEOUT: number;
     CHECK_INTERVAL: number;
     MIN_SLEEP_INTERVAL: number;
     MAX_SLEEP_INTERVAL: number;

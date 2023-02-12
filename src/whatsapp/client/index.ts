@@ -7,6 +7,7 @@ import CreateTokenService from '../../services/CreateTokenService';
 import AppError from '../../errors/AppError';
 import fs from 'fs';
 import appRoot from 'app-root-path';
+import { addMilliseconds, isAfter } from 'date-fns';
 
 declare global {
   interface Window {
@@ -33,6 +34,8 @@ class Whatsapp {
 
   private qrCodeImage: string | undefined;
 
+  private isReady: boolean = false;
+
   constructor() {
 
   }
@@ -49,7 +52,7 @@ class Whatsapp {
     fs.rmdirSync(sessionPath, { recursive: true });
   }
 
-  private async initializeClient(clientId: string = "") {
+  private async initializeClientWithAuth(clientId: string = "") {
 
     await this.finalizeClient();
 
@@ -105,6 +108,38 @@ class Whatsapp {
     this.client.initialize().then();
   }
 
+  private async initializeClient(clientId: string = "") {
+
+    await this.finalizeClient();
+
+    this.isReady = false;
+
+    this.client = new Client({
+      authStrategy: new LocalAuth({ dataPath: 'tokens', clientId: clientId }),
+      puppeteer: {
+        headless: true,
+        args: [
+          '--no-sandbox',
+          '--unhandled-rejections=strict',
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-accelerated-2d-canvas',
+          '--no-first-run',
+          '--no-zygote',
+          '--single-process',
+          '--disable-gpu'
+        ],
+      },
+    });
+
+    this.client.on('ready', async () => {
+      console.log('Client is ready!');
+      this.isReady = true;
+    });
+
+    await this.client.initialize().catch(_ => _);
+  }
+
   private async sleep(ms: number) {
     return new Promise(resolve => {
       setTimeout(resolve, ms);
@@ -123,7 +158,7 @@ class Whatsapp {
     await this.sleep(ms);
 
     if (this.client) {
-      console.log('read qrcode timeout reached');
+      console.warn('read qrcode timeout reached');
       await this.client.destroy();
     }
   }
@@ -135,27 +170,16 @@ class Whatsapp {
 
     if (!this.client || connectedWithWrongFromNumber) {
 
-      await this.finalizeClient();
-
-      this.client = new Client({
-        authStrategy: new LocalAuth({ dataPath: 'tokens', clientId: from }),
-        puppeteer: {
-          headless: true,
-          args: [
-            '--no-sandbox',
-            '--unhandled-rejections=strict',
-            '--disable-setuid-sandbox',
-            '--disable-dev-shm-usage',
-            '--disable-accelerated-2d-canvas',
-            '--no-first-run',
-            '--no-zygote',
-            '--single-process',
-            '--disable-gpu'
-          ],
-        },
-      });
-
-      await this.client.initialize().catch(_ => _);
+      this.initializeClient(from);
+      const authTimeout = addMilliseconds(new Date(), process.env.AUTH_TIMEOUT);
+      while (!this.isReady) {
+        if (isAfter(new Date(), authTimeout)) {
+          console.warn('auth timeout reached');
+          await this.finalizeClient();
+          return false;
+        }
+        await this.sleep(100);
+      }
 
       console.log(`client number changed to ${from}`);
 
@@ -174,7 +198,7 @@ class Whatsapp {
 
     this.deleteSessionPath(from);
 
-    this.initializeClient(from);
+    this.initializeClientWithAuth(from);
 
     while (!this.qrCodeImage) {
       await this.sleep(100);
