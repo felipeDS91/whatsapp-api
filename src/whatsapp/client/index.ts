@@ -137,7 +137,7 @@ class Whatsapp {
       this.isReady = true;
     });
 
-    await this.client.initialize().catch(_ => _);
+    this.client.initialize().catch(_ => _);
   }
 
   private async sleep(ms: number) {
