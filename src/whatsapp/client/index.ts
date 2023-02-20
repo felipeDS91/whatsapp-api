@@ -4,10 +4,10 @@ import qrcodeTerminal from 'qrcode-terminal';
 import qrcode from 'qrcode';
 import Message from '../../models/Message';
 import CreateTokenService from '../../services/CreateTokenService';
-import AppError from '../../errors/AppError';
 import fs from 'fs';
 import appRoot from 'app-root-path';
 import { addMilliseconds, isAfter } from 'date-fns';
+import AppError from '../../errors/AppError';
 
 declare global {
   interface Window {
@@ -137,7 +137,7 @@ class Whatsapp {
       this.isReady = true;
     });
 
-    this.client.initialize().catch(_ => _);
+    this.client.initialize().catch(_ => console.error(_));
   }
 
   private async sleep(ms: number) {
@@ -169,13 +169,12 @@ class Whatsapp {
     const connectedWithWrongFromNumber = this.client?.info?.me?.user !== from;
 
     if (!this.client || connectedWithWrongFromNumber) {
-
+      console.log("starting client");
       this.initializeClient(from);
       const authTimeout = addMilliseconds(new Date(), process.env.AUTH_TIMEOUT);
       while (!this.isReady) {
         if (isAfter(new Date(), authTimeout)) {
-          console.warn('auth timeout reached');
-          await this.finalizeClient();
+          console.error('auth timeout reached');
           return false;
         }
         await this.sleep(100);
@@ -256,15 +255,24 @@ class Whatsapp {
     }
   }
 
+  async takeScreenshot() {
+    try {
+      await this.client.pupPage?.screenshot({ path: 'screenshot.png' });
+      console.log('screenshot done');
+    } catch (error) {
+      console.warn(`fail to take screenshot. description:${error}`)
+    }
+  }
+
   public async sendMessage({ from, to, message, media }: Message): Promise<IReturn> {
     try {
       const definedFrom = await this.setFromClient(from);
-      if (!definedFrom) return { status: 'FROM_NOT_FOUND' };
+      if (!definedFrom) throw { status: 'FROM_NOT_FOUND' };
 
-      if (await this.isDisconnected()) return { status: 'FROM_DISCONNECTED' };
+      if (await this.isDisconnected()) throw { status: 'FROM_DISCONNECTED' };
 
       const formattedTo = await this.getFormattedId(to);
-      if (!formattedTo) return { status: 'TO_NOT_FOUND' };
+      if (!formattedTo) throw { status: 'FROM_NOT_FOUND' };
 
       if (!!media) {
         const base64Media = media.replace(REGEX_REMOVE_BASE64_HEADER, "");
@@ -276,8 +284,13 @@ class Whatsapp {
 
       return { status: 'SUCCESS' };
     } catch (error) {
-      console.error(`fail to send message. description: ${error}`);
-      return { status: 'ERROR' };
+      console.error(`fail to send message. description: ${JSON.stringify(error)}`);
+
+      await this.takeScreenshot();
+      await this.finalizeClient();
+
+      const status = error.status ? error.status : 'ERROR';
+      return { status };
     }
   }
 }

@@ -10,6 +10,11 @@ class TokensRepository extends Repository<Token> {
 
     return findToken || null;
   }
+
+  public async deleteByPhone(phone: string): Promise<void> {
+    await this.delete({ phone });
+  }
+
 }
 
 export default TokensRepository;

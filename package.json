@@ -21,6 +21,7 @@
     "@babel/plugin-proposal-decorators": "^7.12.1",
     "@babel/preset-env": "^7.12.1",
     "@babel/preset-typescript": "^7.12.1",
+    "@types/app-root-path": "^1.2.4",
     "app-root-path": "^3.0.0",
     "babel-plugin-transform-typescript-metadata": "^0.3.1",
     "bcryptjs": "^2.4.3",
