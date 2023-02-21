@@ -14,6 +14,9 @@ export default class TokensController {
       this.whatsapp = new Whatsapp();
     }
 
+    const tokenRepository = getCustomRepository(TokensRepository);
+    await tokenRepository.deleteByPhone(process.env.DEFAULT_DDI + from);
+
     const qrCode = await this.whatsapp.registerNewToken(from);
 
     const image = qrCode.replace('data:image/png;base64,', '');
