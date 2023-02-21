@@ -110,9 +110,9 @@ class Whatsapp {
 
   private async initializeClient(clientId: string = "") {
 
-    await this.finalizeClient();
-
     this.isReady = false;
+
+    await this.finalizeClient();
 
     this.client = new Client({
       authStrategy: new LocalAuth({ dataPath: 'tokens', clientId: clientId }),
@@ -164,6 +164,7 @@ class Whatsapp {
   }
 
   private async setFromClient(number: string): Promise<boolean> {
+    // aparentemente, não está respeitando o isReady
     const from = `${process.env.DEFAULT_DDI}${number}`;
 
     const connectedWithWrongFromNumber = this.client?.info?.me?.user !== from;
