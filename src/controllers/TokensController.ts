@@ -39,13 +39,13 @@ export default class TokensController {
   }
 
   public async delete(request: Request, response: Response): Promise<Response> {
-    const { phone } = request.params;
+    const phone = `${process.env.DEFAULT_DDI}${request.params.phone}`;
+
+    await this.whatsapp.deleteSessionPath(phone);
 
     const tokenRepository = getCustomRepository(TokensRepository);
 
-    const token = await tokenRepository.findByPhone(
-      process.env.DEFAULT_DDI + phone,
-    );
+    const token = await tokenRepository.findByPhone(phone);
 
     if (!token) {
       throw new AppError('Token not found', 404);

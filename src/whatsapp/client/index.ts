@@ -46,7 +46,7 @@ class Whatsapp {
     }
   }
 
-  private deleteSessionPath(clientId: string): void {
+  public deleteSessionPath(clientId: string): void {
     const sessionPath = appRoot.path + '/tokens/session-' + clientId;
     console.log(`erasing path: ${sessionPath}`);
     fs.rmdirSync(sessionPath, { recursive: true });
@@ -164,7 +164,7 @@ class Whatsapp {
   }
 
   private async setFromClient(number: string): Promise<boolean> {
-    // aparentemente, não está respeitando o isReady
+
     const from = `${process.env.DEFAULT_DDI}${number}`;
 
     const connectedWithWrongFromNumber = this.client?.info?.me?.user !== from;
