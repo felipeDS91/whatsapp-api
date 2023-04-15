@@ -25,6 +25,9 @@ interface IReturn {
 }
 
 const DEFAULT_PHONE_LENGTH = 11;
+const NEW_FORMAT_GROUP_LENGTH = 16;
+const TYPE_GROUP = '@g.us';
+const TYPE_CONTACT = '@c.us';
 const REGEX_REMOVE_BASE64_HEADER = new RegExp(/data:image\/[bmp,gif,ico,jpg,png,svg,webp,x\-icon,svg+xml]+;base64,/);
 
 class Whatsapp {
@@ -236,13 +239,16 @@ class Whatsapp {
   }
 
   private async getFormattedId(id: string): Promise<string | undefined> {
-    const numberType = id.length > DEFAULT_PHONE_LENGTH ? '@g.us' : '@c.us';
+    const numberType = id.length > DEFAULT_PHONE_LENGTH ? TYPE_GROUP : TYPE_CONTACT;
 
-    if (numberType === '@c.us') {
+    if (numberType === TYPE_CONTACT) {
       const formattedNumber = `${process.env.DEFAULT_DDI}${id}${numberType}`;
       const verifiedNumber = await this.getIdByNumber(formattedNumber);
-
       return verifiedNumber;
+    }
+    if (numberType === TYPE_GROUP && id.length === NEW_FORMAT_GROUP_LENGTH) {
+      const formattedNumber = `${id}${numberType}`;
+      return formattedNumber;
     }
     return `${process.env.DEFAULT_DDI}${id}${numberType}`;
   }
