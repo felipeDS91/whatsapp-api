@@ -39,6 +39,10 @@ export default class TokensController {
   }
 
   public async delete(request: Request, response: Response): Promise<Response> {
+    if (!this.whatsapp) {
+      this.whatsapp = new Whatsapp();
+    }
+
     const phone = `${process.env.DEFAULT_DDI}${request.params.phone}`;
 
     await this.whatsapp.deleteSessionPath(phone);

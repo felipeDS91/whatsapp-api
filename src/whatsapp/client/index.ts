@@ -25,7 +25,7 @@ interface IReturn {
 }
 
 const DEFAULT_PHONE_LENGTH = 11;
-const NEW_FORMAT_GROUP_LENGTH = 16;
+const NEW_FORMAT_GROUP_LENGTH = 18;
 const TYPE_GROUP = '@g.us';
 const TYPE_CONTACT = '@c.us';
 const REGEX_REMOVE_BASE64_HEADER = new RegExp(/data:image\/[bmp,gif,ico,jpg,png,svg,webp,x\-icon,svg+xml]+;base64,/);
