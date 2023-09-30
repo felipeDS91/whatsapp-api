@@ -5,6 +5,7 @@ import qrcode from 'qrcode';
 import Message from '../../models/Message';
 import CreateTokenService from '../../services/CreateTokenService';
 import fs from 'fs';
+import * as path from 'path';
 import appRoot from 'app-root-path';
 import { addMilliseconds, isAfter } from 'date-fns';
 import AppError from '../../errors/AppError';
@@ -17,18 +18,20 @@ declare global {
 
 interface IReturn {
   status:
-  | 'SUCCESS'
-  | 'ERROR'
-  | 'FROM_NOT_FOUND'
-  | 'FROM_DISCONNECTED'
-  | 'TO_NOT_FOUND';
+    | 'SUCCESS'
+    | 'ERROR'
+    | 'FROM_NOT_FOUND'
+    | 'FROM_DISCONNECTED'
+    | 'TO_NOT_FOUND';
 }
 
 const DEFAULT_PHONE_LENGTH = 11;
 const NEW_FORMAT_GROUP_LENGTH = 18;
 const TYPE_GROUP = '@g.us';
 const TYPE_CONTACT = '@c.us';
-const REGEX_REMOVE_BASE64_HEADER = new RegExp(/data:image\/[bmp,gif,ico,jpg,png,svg,webp,x\-icon,svg+xml]+;base64,/);
+const REGEX_REMOVE_BASE64_HEADER = new RegExp(
+  /data:image\/[bmp,gif,ico,jpg,png,svg,webp,x\-icon,svg+xml]+;base64,/,
+);
 
 class Whatsapp {
   private client: Client;
@@ -39,9 +42,7 @@ class Whatsapp {
 
   private isReady: boolean = false;
 
-  constructor() {
-
-  }
+  constructor() {}
 
   private async finalizeClient(): Promise<void> {
     if (this.client != null) {
@@ -50,13 +51,22 @@ class Whatsapp {
   }
 
   public deleteSessionPath(clientId: string): void {
-    const sessionPath = appRoot.path + '/tokens/session-' + clientId;
-    console.log(`erasing path: ${sessionPath}`);
-    fs.rmdirSync(sessionPath, { recursive: true });
+    try {
+      // const sessionPath = path.join(env.IMAGE_PATH, folderName, file);
+      const sessionPath = path.join(
+        appRoot.path,
+        'tokens',
+        '/session-' + clientId,
+      );
+      console.log(`erasing path: ${sessionPath}`);
+      fs.rmdirSync(sessionPath, { recursive: true });
+    } catch (error) {
+      console.error('fail to erase path');
+      console.error(error);
+    }
   }
 
-  private async initializeClientWithAuth(clientId: string = "") {
-
+  private async initializeClientWithAuth(clientId: string = '') {
     await this.finalizeClient();
 
     this.client = new Client({
@@ -72,7 +82,7 @@ class Whatsapp {
           '--no-first-run',
           '--no-zygote',
           '--single-process',
-          '--disable-gpu'
+          '--disable-gpu',
         ],
       },
     });
@@ -103,7 +113,7 @@ class Whatsapp {
       }
     });
 
-    this.client.on('authenticated', (session) => {
+    this.client.on('authenticated', session => {
       console.log('Authenticated');
       this.sessionToSave = JSON.stringify(session || 'multidevice');
     });
@@ -111,8 +121,7 @@ class Whatsapp {
     this.client.initialize().then();
   }
 
-  private async initializeClient(clientId: string = "") {
-
+  private async initializeClient(clientId: string = '') {
     this.isReady = false;
 
     await this.finalizeClient();
@@ -130,7 +139,7 @@ class Whatsapp {
           '--no-first-run',
           '--no-zygote',
           '--single-process',
-          '--disable-gpu'
+          '--disable-gpu',
         ],
       },
     });
@@ -167,13 +176,12 @@ class Whatsapp {
   }
 
   private async setFromClient(number: string): Promise<boolean> {
-
     const from = `${process.env.DEFAULT_DDI}${number}`;
 
     const connectedWithWrongFromNumber = this.client?.info?.me?.user !== from;
 
     if (!this.client || connectedWithWrongFromNumber) {
-      console.log("starting client");
+      console.log('starting client');
       this.initializeClient(from);
       const authTimeout = addMilliseconds(new Date(), process.env.AUTH_TIMEOUT);
       while (!this.isReady) {
@@ -187,7 +195,6 @@ class Whatsapp {
       console.log(`client number changed to ${from}`);
 
       return true;
-
     }
     await this.getConnectionBack();
 
@@ -226,9 +233,7 @@ class Whatsapp {
   }
 
   private async getIdByNumber(id: string) {
-
     try {
-
       const { _serialized: numberId } = await this.client.getNumberId(id);
 
       return numberId;
@@ -239,7 +244,8 @@ class Whatsapp {
   }
 
   private async getFormattedId(id: string): Promise<string | undefined> {
-    const numberType = id.length > DEFAULT_PHONE_LENGTH ? TYPE_GROUP : TYPE_CONTACT;
+    const numberType =
+      id.length > DEFAULT_PHONE_LENGTH ? TYPE_GROUP : TYPE_CONTACT;
 
     if (numberType === TYPE_CONTACT) {
       const formattedNumber = `${process.env.DEFAULT_DDI}${id}${numberType}`;
@@ -267,11 +273,16 @@ class Whatsapp {
       await this.client.pupPage?.screenshot({ path: 'screenshot.png' });
       console.log('screenshot done');
     } catch (error) {
-      console.warn(`fail to take screenshot. description:${error}`)
+      console.warn(`fail to take screenshot. description:${error}`);
     }
   }
 
-  public async sendMessage({ from, to, message, media }: Message): Promise<IReturn> {
+  public async sendMessage({
+    from,
+    to,
+    message,
+    media,
+  }: Message): Promise<IReturn> {
     try {
       const definedFrom = await this.setFromClient(from);
       if (!definedFrom) throw { status: 'FROM_NOT_FOUND' };
@@ -282,16 +293,20 @@ class Whatsapp {
       if (!formattedTo) throw { status: 'FROM_NOT_FOUND' };
 
       if (!!media) {
-        const base64Media = media.replace(REGEX_REMOVE_BASE64_HEADER, "");
+        const base64Media = media.replace(REGEX_REMOVE_BASE64_HEADER, '');
         const messageMedia = new MessageMedia('image/png', base64Media);
-        await this.client.sendMessage(formattedTo, messageMedia, { caption: message });
+        await this.client.sendMessage(formattedTo, messageMedia, {
+          caption: message,
+        });
       } else {
         await this.client.sendMessage(formattedTo, message);
       }
 
       return { status: 'SUCCESS' };
     } catch (error) {
-      console.error(`fail to send message. description: ${JSON.stringify(error)}`);
+      console.error(
+        `fail to send message. description: ${JSON.stringify(error)}`,
+      );
 
       await this.takeScreenshot();
       await this.finalizeClient();
