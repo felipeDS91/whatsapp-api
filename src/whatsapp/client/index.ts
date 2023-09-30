@@ -52,7 +52,6 @@ class Whatsapp {
 
   public deleteSessionPath(clientId: string): void {
     try {
-      // const sessionPath = path.join(env.IMAGE_PATH, folderName, file);
       const sessionPath = path.join(
         appRoot.path,
         'tokens',
@@ -148,7 +147,6 @@ class Whatsapp {
       console.log('Client is ready!');
       this.isReady = true;
     });
-
     this.client.initialize().catch(_ => console.error(_));
   }
 
@@ -181,7 +179,7 @@ class Whatsapp {
     const connectedWithWrongFromNumber = this.client?.info?.me?.user !== from;
 
     if (!this.client || connectedWithWrongFromNumber) {
-      console.log('starting client');
+      console.log('starting client ' + from);
       this.initializeClient(from);
       const authTimeout = addMilliseconds(new Date(), process.env.AUTH_TIMEOUT);
       while (!this.isReady) {
