@@ -141,6 +141,10 @@ class Whatsapp {
           '--disable-gpu',
         ],
       },
+      webVersionCache: {
+        type: 'remote',
+        remotePath: `https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2407.3.html`,
+      },
     });
 
     this.client.on('ready', async () => {

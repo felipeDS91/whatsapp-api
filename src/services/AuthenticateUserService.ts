@@ -47,7 +47,7 @@ class AuthenticateUserService {
     });
 
     const decoded = verify(token, secret);
-    const { exp } = decoded as ITokenPayload;
+    const { exp } = decoded as unknown as ITokenPayload;
 
     return {
       user,
