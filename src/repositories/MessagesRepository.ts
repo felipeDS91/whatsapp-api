@@ -11,7 +11,7 @@ class MessagesRepository extends Repository<Message> {
         { schedule_date: IsNull(), status: 'WAITING' },
       ],
       take: 10,
-      order: { id: 'DESC' },
+      order: { from: 'DESC', id: 'DESC' },
     });
 
     return findMessage || null;
