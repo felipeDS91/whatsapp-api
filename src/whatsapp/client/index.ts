@@ -39,7 +39,7 @@ class Whatsapp {
   // Repository with all versions: https://github.com/wppconnect-team/wa-version/tree/main/html
   // Always use the raw version
   private remotePath: string =
-    'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2410.1.html';
+    'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2413.51-beta.html';
 
   private sessionToSave: string | undefined;
 
