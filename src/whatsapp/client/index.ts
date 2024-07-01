@@ -126,6 +126,8 @@ class Whatsapp {
       this.sessionToSave = JSON.stringify(session || 'multidevice');
     });
 
+    // TODO: we may use a wait here, using with exodus
+    // Source: https://github.com/pedroslopez/whatsapp-web.js/pull/2816
     this.client.initialize().then();
   }
 
