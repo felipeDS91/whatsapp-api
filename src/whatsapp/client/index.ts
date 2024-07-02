@@ -90,10 +90,10 @@ class Whatsapp {
           '--disable-gpu',
         ],
       },
-      webVersionCache: {
-        type: 'remote',
-        remotePath: this.remotePath,
-      },
+      // webVersionCache: {
+      //   type: 'remote',
+      //   remotePath: this.remotePath,
+      // },
     });
 
     this.client.on('qr', async qr => {
@@ -151,10 +151,10 @@ class Whatsapp {
           '--disable-gpu',
         ],
       },
-      webVersionCache: {
-        type: 'remote',
-        remotePath: this.remotePath,
-      },
+      // webVersionCache: {
+      //   type: 'remote',
+      //   remotePath: this.remotePath,
+      // },
     });
 
     this.client.on('ready', async () => {
