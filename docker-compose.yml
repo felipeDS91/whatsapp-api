@@ -2,6 +2,7 @@ version: '3'
 services:
   mysql_dev:
     image: mysql:5.7
+    platform: linux/amd64
     environment:
       - MYSQL_ROOT_PASSWORD=1234
       - MYSQL_DATABASE=whatsapp
