@@ -11,13 +11,17 @@ export default async function ensureAdminOnly(
   try {
     const usersRepository = getRepository(User);
 
-    const user = await usersRepository.findOne(request.user.id);
+    // Fetch only the 'admin' field for the user
+    const user = await usersRepository.findOne(request.user.id, {
+      select: ['admin'],
+    });
 
     if (!user?.admin) {
       throw new AppError('Action allowed for administrators only!', 405);
     }
+
     return next();
-  } catch {
+  } catch (error) {
     throw new AppError('Action allowed for administrators only!', 405);
   }
 }
