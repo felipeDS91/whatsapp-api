@@ -17,4 +17,6 @@ tmp/uploads/*
 WWebJS/
 tokens/
 
+.wwebjs_cache/
+
 screenshot.png
