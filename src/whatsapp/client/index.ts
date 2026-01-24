@@ -119,8 +119,8 @@ class Whatsapp {
         this.sessionToSave = undefined;
 
         // Destroy the client after saving the token
-        // await this.finalizeClient(clientId);
-        // console.log('Client destroyed after saving token');
+        await this.finalizeClient(clientId);
+        console.log('Client destroyed after saving token');
       }
     });
 
