@@ -79,7 +79,7 @@ class Whatsapp {
     const client = new Client({
       authStrategy: new LocalAuth({ dataPath: 'tokens', clientId: clientId }),
       puppeteer: {
-        headless: true,
+        headless: process.env.NODE_ENV !== 'development',
         args: [
           '--no-sandbox',
           '--unhandled-rejections=strict',
@@ -117,6 +117,10 @@ class Whatsapp {
         });
 
         this.sessionToSave = undefined;
+
+        // Destroy the client after saving the token
+        // await this.finalizeClient(clientId);
+        // console.log('Client destroyed after saving token');
       }
     });
 
@@ -127,8 +131,7 @@ class Whatsapp {
     });
 
     client.on('authenticated', session => {
-      console.log('Authenticated'); // it shows 3 times
-      console.log(`Session: ${session}`);
+      console.log('Authenticated');
       this.sessionToSave = JSON.stringify(session || 'multidevice');
     });
 
@@ -143,7 +146,7 @@ class Whatsapp {
     const client = new Client({
       authStrategy: new LocalAuth({ dataPath: 'tokens', clientId: clientId }),
       puppeteer: {
-        headless: true,
+        headless: process.env.NODE_ENV !== 'development',
         args: [
           '--no-sandbox',
           '--unhandled-rejections=strict',
